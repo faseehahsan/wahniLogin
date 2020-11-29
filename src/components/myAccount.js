@@ -34,8 +34,8 @@ function Login() {
         <form className='form'>
         <div className={headerContainer1} onClick={handleRegisterClick}>R E G I S T E R</div>
           <div className={inputContainer1}>
-            <p><input type="email" placeholder="Email" name="email" /></p>
-            <p><input type="password" placeholder="Password" name="password" /></p>
+            <p><input type="text" placeholder="Name" name="name" /></p>
+            <p><input type="number" placeholder="Mobile Number" name="mobile" /></p>
             <p className='button1'>SIGN UP</p>
           </div>
         </form>
@@ -46,9 +46,9 @@ function Login() {
         <form className='form'>
         <div className={headerContainer2} onClick={handleLoginClick}>L O G I N</div>
           <div className={inputContainer2}>
-            <p><input type="email" placeholder="Email" name="email" /></p>
-            <p><input type="password" placeholder="Password" name="password" /></p>
-            <p className='button1'>SIGN UP</p>
+            <p><input type="number" placeholder="Mobile number" name="mobile" /></p>
+            <p><input type="password" placeholder="Enter OTP" name="otp" /></p>
+            <p className='button1'>SIGN IN</p>
           </div>
         </form>
       </div>

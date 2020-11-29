@@ -105,6 +105,14 @@ img {
     opacity: 1;
   }
 
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance:textfield;
+}
 .button1 {
     background: #225218;
     width: 200px;
