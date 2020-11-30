@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/wahniLogin/static/css/main.403127ea.chunk.css",
-    "main.js": "/wahniLogin/static/js/main.6e19b4c2.chunk.js",
-    "main.js.map": "/wahniLogin/static/js/main.6e19b4c2.chunk.js.map",
+    "main.js": "/wahniLogin/static/js/main.e6f864b1.chunk.js",
+    "main.js.map": "/wahniLogin/static/js/main.e6f864b1.chunk.js.map",
     "runtime-main.js": "/wahniLogin/static/js/runtime-main.5549de87.js",
     "runtime-main.js.map": "/wahniLogin/static/js/runtime-main.5549de87.js.map",
     "static/js/2.0f078672.chunk.js": "/wahniLogin/static/js/2.0f078672.chunk.js",
@@ -17,6 +17,6 @@
     "static/js/runtime-main.5549de87.js",
     "static/js/2.0f078672.chunk.js",
     "static/css/main.403127ea.chunk.css",
-    "static/js/main.6e19b4c2.chunk.js"
+    "static/js/main.e6f864b1.chunk.js"
   ]
 }
