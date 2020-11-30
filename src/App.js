@@ -12,6 +12,7 @@ import { UserContextProvider } from './components/context/user1Context';
 
 function App() {
   return (
+    
     <HashRouter>
       <Navbar />
       <Switch>

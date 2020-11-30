@@ -1,11 +1,12 @@
 import { Redirect, Link } from 'react-router-dom';
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import { UserContext } from '../context/user1Context';
 import './quizScreen.css';
-import Timer from './timer';
 import QuestionCard from './questionCard'
 
 function Home() {
+
+    
 
     const user = useContext(UserContext);
 
@@ -16,7 +17,7 @@ function Home() {
     const [currentQuestion, setCurrentQuestion] = useState(0);
 	const [showScore, setShowScore] = useState(false);
     const [score, setScore] = useState(0);
-    const [scoreMessage, setScoreMessage] = useState('Congratulations');
+    const [scoreMessage, setScoreMessage] = useState('');
     
     const [answers, setAnswers] = useState([false, false, false, false, false]);
     
@@ -77,16 +78,17 @@ function Home() {
         }
     }
 
-    function submitQ(score) {
+    function submitQ(score, scoreMessage) {
         setShowScore(true);
         setScore(score)
+        setScoreMessage(scoreMessage)
     }
 
     
-    if (!user) return <Redirect to='/signin' />    
+    if (!user) return <Redirect to='/myAccount' />
     if (user) {
         return (
-        
+        <div className='appContainer'>
             <div className='app'>
                 {showScore ? (
                     <div className='score-section'>
@@ -102,9 +104,9 @@ function Home() {
                             prevQ={prevQ} 
                             nextQ={nextQ}
                             submitQ={submitQ} />
-                        <Timer setShowScore={setShowScore} showScore={showScore} setScoreMessage={setScoreMessage} />
                     </div>
                 )}
+            </div>
             </div>
         )
     }

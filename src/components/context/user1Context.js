@@ -22,12 +22,12 @@ export function UserContextProvider(props) {
   const [user, setUser] = useState({ loggedIn: false });
 //   const userName1 = firebase.auth().currentUser.displayName;
   const [error, setError] = useState("");
-  useEffect(() => {
-    const unsubscribe = onAuthStateChange(setUser);
-    return () => {
-      unsubscribe();
-    }
-  }, []);
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChange(setUser);
+  //   return () => {
+  //     unsubscribe();
+  //   }
+  // }, []);
   
   return (
     <UserProvider value={user}>
