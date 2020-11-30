@@ -11,9 +11,6 @@ function Timer(props) {
                 if (!timeOver) {
                     setDuration(duration => duration - 1);
 
-                } else {
-                    setDuration('TIME OUT')
-                    props.setShowScore(true)
                 }
     
               }, 1000);
@@ -21,7 +18,9 @@ function Timer(props) {
               setTimeout(
                   () => {
                       setTimeOver(true)
-                      console.log('timeout set')
+                      setDuration('TIME OUT')
+                    props.setShowScore(true)
+                    props.setScoreMessage('TIME OUT')
                   }
                 , 30000);
             return () => clearInterval(interval);
@@ -29,9 +28,6 @@ function Timer(props) {
       }, [timeOver]);
 
     const [started, setStarted] = useState(false);
-
-    
-
 
   return (
    

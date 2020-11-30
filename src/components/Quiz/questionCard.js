@@ -1,8 +1,28 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-function questionCard(props) {
+function QuestionCard(props) {
 
-    const {currentQuestion, questions, prevQ, nextQ, handleAnswerOptionClick} = props
+    const {currentQuestion, questions, prevQ, nextQ, submitQ} = props
+
+    const [selectedAnswer, setSelectedAnswer] = useState([]);
+    const [correctAnswer, setCorrectAnswer] = useState([]);
+
+    function selectedTrue(clickedAnswer, indexure) {
+        if(clickedAnswer === selectedAnswer[indexure]) {
+            return 'button-selected'
+        }
+    }
+
+    function newSelectedAnswerArray(answer, indexure, isCorrect) {
+        const newArray = [...selectedAnswer];
+        newArray[indexure] = answer;
+        setSelectedAnswer(newArray)
+
+        const newArray1 = [...correctAnswer];
+        newArray1[indexure] = isCorrect;
+        setCorrectAnswer(newArray1)
+
+    }
 
     return (
         <div>
@@ -14,13 +34,18 @@ function questionCard(props) {
             </div>
             <div className='answer-section'>
                 {questions.answerOptions.map((answerOption) => (
-                    <button onClick={() => handleAnswerOptionClick(answerOption.isCorrect)}>{answerOption.answerText}</button>
+                    <button className={selectedTrue(answerOption.answerText, currentQuestion)} onClick={() => {
+                    newSelectedAnswerArray(answerOption.answerText, currentQuestion, answerOption.isCorrect);
+                    }}>
+                    {answerOption.answerText}
+                    </button>
                 ))}
             </div>
 
             <div>
                 <div onClick={prevQ}>Go back</div>
                 <div onClick={nextQ}>Next</div>
+                <div onClick={() => submitQ(correctAnswer.filter(data => data === true).length)}>Submit</div>
             </div>
 
         </div>
@@ -30,4 +55,4 @@ function questionCard(props) {
     );
 }
 
-export default questionCard;
+export default QuestionCard;
