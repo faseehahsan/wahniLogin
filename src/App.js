@@ -1,17 +1,23 @@
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
-
+import MyAccount from './components/Registration/myAccount'
+import { BrowserRouter, Switch, Route, HashRouter } from 'react-router-dom';
+import Navbar from './components/Layout/navbar'
 import Home from './components/home'
-import MyAccount from './components/myAccount'
+import Quiz from './components/Quiz/quizScreen'
+
 
 
 function App() {
   return (
-    <BrowserRouter>
-      <Switch>
-        <Route exact path='/' component={Home} />
-        <Route exact path='/account' component={MyAccount} />
-      </Switch>
-    </BrowserRouter>
+    <HashRouter>
+    <Navbar />
+    <Switch>
+            <Route exact path='/' component={Home} />
+            <Route exact path='/myAccount' component={MyAccount} />
+            <Route exact path='/Quiz' component={Quiz} />
+          </Switch>
+    </HashRouter>
+        
+    
 
   );
 }
