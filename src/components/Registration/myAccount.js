@@ -59,8 +59,6 @@ function Login() {
               <p><input type="password" placeholder="Enter OTP" name="otp" /></p>
               <p className='button1'>SIGN IN</p>
             </div>
-            <div onClick={() => console.log(5)}>Hello</div>
-            <Link to='/goto' className="brand-logo left">NE Plan</Link>
   
           </form>
         </div>

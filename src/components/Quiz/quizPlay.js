@@ -89,24 +89,27 @@ function Home() {
     if (user) {
         return (
         <div className='appContainer'>
-            <div className='app'>
                 {showScore ? (
+                    <div className='app'>
+
                     <div className='score-section'>
                     <div>{scoreMessage}</div>
                         You scored {score} out of {questions.length}
                         <Link to='/Quiz'>Retry</Link>
                     </div>
+                    </div>
+
                 ) : (
-                    <div>
+                    <div className='app'>
                         <QuestionCard 
                             currentQuestion={currentQuestion} 
                             questions={questions[currentQuestion]} 
                             prevQ={prevQ} 
                             nextQ={nextQ}
-                            submitQ={submitQ} />
+                            submitQ={submitQ}
+                            numberOfQ={questions.length} />
                     </div>
                 )}
-            </div>
             </div>
         )
     }

@@ -27,6 +27,15 @@
     /* position: absolute; */
     /* margin-left: 5px; */
   }
+
+  .question-container {
+    /* flex: 1; */
+    display: flex;
+    /* background-color: white; */
+    flex-direction: column;
+    width: 100%;
+
+  }
   
   .score-section {
     display: flex;
@@ -34,40 +43,54 @@
     align-items: center;
   }
   
-  /* QUESTION/TIMER/LEFT SECTION */
   .question-section {
     width: 100%;
     position: relative;
+    margin-left: 10px;
+    margin-bottom: 10px;
   }
   
-  .question-count {
+  .question-count-timer {
+    display: flex;
     margin-bottom: 20px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .question-count{
+    color: white;
+
+  }
+
+  .timer {
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    margin-right: 10px;
+    background-color: black;
+    padding: 12px;
+    border-radius: 25px;
+    transition: 1s;
   }
   
-  .question-count span {
-    font-size: 28px;
-  }
   
   .question-text {
     margin-bottom: 12px;
+    font-size: 20px;
+    font-weight: bold;
+    /* color: white; */
+    font-family: Helvetica;
   }
   
-  .timer-text {
-    background: rgb(230, 153, 12);
-    padding: 15px;
-    margin-top: 20px;
-    margin-right: 20px;
-    border: 5px solid rgb(255, 189, 67);
-    border-radius: 15px;
-    text-align: center;
-  }
   
-  /* ANSWERS/RIGHT SECTION */
   .answer-section {
-    width: 100%;
+    width: 80%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    align-self: center;
+
   }
   
   button {
@@ -77,25 +100,25 @@
     background-color: #252d4a;
     border-radius: 15px;
     display: flex;
-    padding: 5px;
+    padding: 15px;
+    padding-left: 20px;
     justify-content: flex-start;
     align-items: center;
-    border: 5px solid #234668;
+    border: 2px solid #234668;
     cursor: pointer;
+    margin: 3px;
+    font-size: 16px;
+    letter-spacing: 0.06em;
+    transition: 0.5s;
   }
 
   .button-selected{
       background-color: black;
   }
+  .button-selected:hover{
+      background-color: #1e2027;      
+  }
 
-  .correct {
-    background-color: #2f922f;
-  }
-  
-  .incorrect {
-    background-color: #ff3333;
-  }
-  
   button:hover {
     background-color: #555e7d;
   }
@@ -103,7 +126,52 @@
   button:focus {
     outline: none;
   }
-  
-  button svg {
-    margin-right: 5px;
+
+  .submitButtonContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
   }
+
+.submitButton {
+  background: #252d4a;
+  width: 200px;
+  margin-top: 20px;
+  padding: 10px;
+  color: white;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 15px;
+  letter-spacing: 0.2em;
+  text-align: center;
+  transition: 0.5s;
+  text-transform: uppercase;
+  }
+
+  .submitButton:hover {
+    background-color: #131727;
+  }
+
+  .buttonsContainer {
+    display: flex;
+    margin-top: 20px;
+  }
+
+  .button1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #225218;
+    width: 100px;
+    color: white;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 15px;
+    letter-spacing: 0.2em;
+    text-align: center;
+    transition: 0.5s;
+    padding: 10px;
+    text-transform: uppercase;
+    font-size: 12px;
+}

@@ -4,7 +4,7 @@ import Timer from './timer';
 
 function QuestionCard(props) {
 
-    const { currentQuestion, questions, prevQ, nextQ, submitQ } = props
+    const { currentQuestion, questions, prevQ, nextQ, submitQ, numberOfQ } = props
 
     const [selectedAnswer, setSelectedAnswer] = useState([]);
     const [correctAnswer, setCorrectAnswer] = useState([]);
@@ -40,16 +40,22 @@ function QuestionCard(props) {
         )
     } else {
         return (
-            <div>
+            <div className='question-container'>
                 <div className='question-section'>
+                    <div className='question-count-timer'>
                     <div className='question-count'>
-                        <span>Question {currentQuestion + 1}</span>/5
+                    <span>Question {currentQuestion + 1}</span>/ {numberOfQ}
+                    </div>
+                        <div className='timer'>
+                        <Timer timeOver={timeOver} setTimeOver={setTimeOver} />
+                        </div>
+
                     </div>
                     <div className='question-text'>{questions.questionText}</div>
                 </div>
                 <div className='answer-section'>
                     {questions.answerOptions.map((answerOption) => (
-                        <button className={selectedTrue(answerOption.answerText, currentQuestion)} onClick={() => {
+                        <button className={selectedTrue(answerOption.answerText, currentQuestion)} id='answerButton' onClick={() => {
                             newSelectedAnswerArray(answerOption.answerText, currentQuestion, answerOption.isCorrect);
                         }}>
                             {answerOption.answerText}
@@ -57,12 +63,16 @@ function QuestionCard(props) {
                     ))}
                 </div>
 
-                <div>
-                    <div onClick={prevQ}>Go back</div>
-                    <div onClick={nextQ}>Next</div>
-                    <div onClick={() => submitQ(correctAnswer.filter(data => data === true).length, 'Congatulations')}>Submit</div>
+                <div className='submitButtonContainer'>
+                    <div className='submitButton' onClick={() => submitQ(correctAnswer.filter(data => data === true).length, 'Congatulations')}>Submit</div>
                 </div>
-                {/* <Timer timeOver={timeOver} setTimeOver={setTimeOver} /> */}
+
+                <div className='buttonsContainer'>
+                    <div className='button1' onClick={prevQ}>Go back</div>
+                    <div className='button1' onClick={nextQ}>Next</div>
+                </div>
+
+                
             </div>
         );
 
