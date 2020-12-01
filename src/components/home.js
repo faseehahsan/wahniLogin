@@ -8,7 +8,6 @@ function Home() {
     return (
         <div>
             <h1>WahniHome</h1>
-        <h1>{user.mobile}</h1>
         </div>
     );
 }

@@ -8,8 +8,11 @@ import './app.css'
 
 function Login() {
 
+  // confirm if user is available
   const user = useContext(UserContext);
-  const userLoggedIn = false
+
+
+  const userLoggedIn = true //for test purposes
 
   const [loginClicked, setLoginClicked] = useState(false);
   const [registerClicked, setRegisterClicked] = useState(false);
@@ -69,7 +72,7 @@ function Login() {
   } else {
     return(
       <div>
-      <Profile />
+      <Profile user={user} />
       </div>
     )
   }
