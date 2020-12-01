@@ -1,26 +1,27 @@
 import { Redirect, Link } from 'react-router-dom';
-import React, {useState, useContext, useEffect} from 'react';
+import React, {useState, useContext } from 'react';
 import { UserContext } from '../context/user1Context';
 import './quizScreen.css';
 import QuestionCard from './questionCard'
 
 function Home() {
 
-    
+    // inside useEffect we use fetch API to call in the questions and save in const questions
 
+    // useEffect(() => {
+    //     effect
+    //     return () => {
+    //         cleanup
+    //     }
+    // }, [input])
+
+    // useContext is used to confirm if a user is loggedIn
     const user = useContext(UserContext);
 
-
-
-    const [started, setStarted] = useState(false);
-
     const [currentQuestion, setCurrentQuestion] = useState(0);
-	const [showScore, setShowScore] = useState(false);
-    const [score, setScore] = useState(0);
-    const [scoreMessage, setScoreMessage] = useState('');
+    const [showScore, setShowScore] = useState(false);
     
-    const [answers, setAnswers] = useState([false, false, false, false, false]);
-    
+    const [score, setScore] = useState(0);    
     
 
     const questions = [
@@ -78,24 +79,28 @@ function Home() {
         }
     }
 
-    function submitQ(score, scoreMessage) {
+    function submitQ(score) {
         setShowScore(true);
         setScore(score)
-        setScoreMessage(scoreMessage)
+
+        // score with user id is sent to backEnd to store with new Date()
     }
 
-    
+    // if there is no user logged in this is redirected to myAccount for login or register
+
     if (!user) return <Redirect to='/myAccount' />
+
     if (user) {
         return (
         <div className='appContainer'>
                 {showScore ? (
-                    <div className='app'>
-
-                    <div className='score-section'>
-                    <div>{scoreMessage}</div>
-                        You scored {score} out of {questions.length}
-                        <Link to='/Quiz'>Retry</Link>
+                    <div className='app score'>
+                    <div className='score-header'>Congratulations !!!</div>
+                    <div className='score-message'>
+                    You scored {score} out of {questions.length}
+                    </div>
+                    <div>
+                        <Link className='link button1' to='/Quiz'>Retry</Link>
                     </div>
                     </div>
 

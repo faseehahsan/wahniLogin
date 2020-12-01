@@ -1,28 +1,27 @@
-import { Redirect, Link } from 'react-router-dom';
-import React, {useState, useContext} from 'react';
-import { UserContext } from '../context/user1Context';
+import { Link } from 'react-router-dom';
+import React from 'react';
 import './quizScreen.css';
-import Timer from './timer';
-import QuestionCard from './questionCard'
 
 function Home() {
-
-    const user = useContext(UserContext);
-
     
-    if (!user) return <Redirect to='/myAccount' />    
 
         return (
-            <div>
-
-            <button>
-            <Link to='/Quiz/play'>START</Link>
-            </button>
+            <div className='appContainer'>
+            <div className='quizScreenContainer'>
             
-            <button>
-            <Link to='/Quiz/ranking'>Ranking</Link>
-            </button>
+            
+            <Link className='quizNavContainer link' to='/Quiz/play'>
+            <img src="https://image.flaticon.com/icons/png/512/27/27223.png" alt="" />
+            <div className='quizScreenText'>PLAY</div>
+            </Link>
 
+            <Link className='quizNavContainer link' to='/Quiz/ranking'>
+            <img src="https://image.flaticon.com/icons/png/512/13/13815.png" alt="" />
+            <div className='quizScreenText'>RANKINGS</div>
+            </Link>
+
+            
+            </div>
             </div>
         )
     

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useCallback, useState } from 'react';
+import React, { useState } from 'react';
 
 
 const defaultUser = { loggedIn: false, email: "" };
@@ -8,6 +8,9 @@ const UserProvider = UserContext.Provider;
 const UserConsumer = UserContext.Consumer;
 
 function onAuthStateChange(callback) {
+
+
+  // user is added or logged in and sent to all the components of this site through this context
 
   const user = true
 

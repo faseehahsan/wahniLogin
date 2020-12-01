@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Timer from './timer';
 
 
@@ -27,16 +27,21 @@ function QuestionCard(props) {
         const newArray1 = [...correctAnswer];
         newArray1[indexure] = isCorrect;
         setCorrectAnswer(newArray1)
-
     }
 
 
     if (timeOver) {
         return (
-            <div>
-                <div>TIMEOUT</div>
-                <div onClick={() => submitQ(correctAnswer.filter(data => data === true).length, 'TIMEOUT')}>Click to see Score</div>
-            </div>
+            
+            <div className='timeout'>
+
+                    <div className='score-header'>TIMEOUT !!!</div>
+                    
+                    <div>
+                        <div className='button1' onClick={() => submitQ(correctAnswer.filter(data => data === true).length)}>Click to see Score</div>
+
+                    </div>
+                    </div>
         )
     } else {
         return (
@@ -64,10 +69,10 @@ function QuestionCard(props) {
                 </div>
 
                 <div className='submitButtonContainer'>
-                    <div className='submitButton' onClick={() => submitQ(correctAnswer.filter(data => data === true).length, 'Congatulations')}>Submit</div>
+                    <div className='submitButton' onClick={() => submitQ(correctAnswer.filter(data => data === true).length)}>Submit</div>
                 </div>
 
-                <div className='buttonsContainer'>
+                <div className='next-and-prev-buttonsContainer'>
                     <div className='button1' onClick={prevQ}>Go back</div>
                     <div className='button1' onClick={nextQ}>Next</div>
                 </div>

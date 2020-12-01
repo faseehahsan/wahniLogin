@@ -4,8 +4,6 @@ import Profile from '../Profile/profile'
 
 
 import './app.css'
-import { Link } from 'react-router-dom'
-
 
 
 function Login() {
@@ -33,6 +31,8 @@ function Login() {
     setRegisterClicked(false)
     setLoginClicked(true)
   }
+
+  // if user is logged in we show profile else we show register or login page
 
   if (!userLoggedIn) {
     return (
