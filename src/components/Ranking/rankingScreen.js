@@ -4,6 +4,8 @@ import '../Registration/app.css'
 
 function RankingScreen() {
 
+    // receive scores from backend
+
     const rankings = [
         {
             userid: '11111',
@@ -12,10 +14,14 @@ function RankingScreen() {
                 {
                     submittedAt: 1,
                     score: '5',
+                    percentageIncrease: '25'
+
                 },
                 {
                     submittedAt: 2,
                     score: '10',
+                    percentageIncrease: '50'
+
                 }
             ]
         },
@@ -26,52 +32,65 @@ function RankingScreen() {
                 {
                     submittedAt: 1,
                     score: '45',
+                    percentageIncrease: '56'
+
                 },
                 {
                     submittedAt: 2,
                     score: '5',
+                    percentageIncrease: '45'
+
                 },
             ]
         },
         {
-            userid: '',
-            username: '',
+            userid: '33333',
+            username: 'CCCCC',
             scores: [
                 {
                     submittedAt: 1,
                     score: '23',
+                    percentageIncrease: '45'
+
                 },
                 {
                     submittedAt: 2,
                     score: '56',
+                    percentageIncrease: '13'
+
                 },
             ]
         },
         {
-            userid: '',
-            username: '',
+            userid: '44444',
+            username: 'DDDDD',
             scores: [
                 {
                     submittedAt: 1,
                     score: '55',
+                    percentageIncrease: '12'
                 },
                 {
                     submittedAt: 2,
                     score: '8',
+                    percentageIncrease: '16'
+
                 },
             ]
         },
         {
-            userid: '',
-            username: '',
+            userid: '55555',
+            username: 'EEEEE',
             scores: [
                 {
                     submittedAt: 1,
                     score: '63',
+                    percentageIncrease: '32'
                 },
                 {
                     submittedAt: 2,
                     score: '80',
+                    percentageIncrease: '60'
                 },
             ]
         },
@@ -81,6 +100,10 @@ function RankingScreen() {
     const [loginClicked, setLoginClicked] = useState(false);
     const [registerClicked, setRegisterClicked] = useState(false);
     const [logoutClicked, setLogoutClicked] = useState(false);
+    
+    const [topScores, setTopScores] = useState([]);
+    const [mostAttempts, setMostAttempts] = useState([]);
+    const [highestPercentage, setHighestPercentage] = useState([]);
   
     const loginContainer1 = registerClicked ? 'login-container loginresponsive': 'login-container loginresponsive hide-login';
     const headerContainer1 = registerClicked ? 'header': 'header headerHover';
@@ -94,23 +117,62 @@ function RankingScreen() {
     const headerContainer3 = logoutClicked ? 'header': 'header headerHover';
     const rankTable3 = logoutClicked ? 'rankTable' : 'rankTable hide-section';
     
-  
+    function topScore() {
+        const newArray = [];
+        rankings.map(data => {
+            data.scores.map(data1 => {
+                newArray.push(
+                    {
+                        name: data.username,
+                        score: data1.score
+                    }
+                )
+            })
+        })
+        setTopScores(newArray.sort((a,b) => (parseInt(b.score) > parseInt(a.score)) ? 1 : -1))
+    }
+
+    function mostAttempt() {
+        const newArray = [];
+        rankings.map(data => newArray.push({
+            name: data.username,
+            attempts: data.scores.length
+        }))
+        setMostAttempts(newArray.sort((a,b) => (parseInt(b.attempts) > parseInt(a.attempts)) ? 1 : -1))
+    }
+
+    function percentageHighest() {
+        const newArray = [];
+        rankings.map(data => {
+            data.scores.map(data1 => {
+                newArray.push(
+                    {
+                        name: data.username,
+                        percentage: data1.percentageIncrease
+                    }
+                )
+            })
+        })
+        setHighestPercentage(newArray.sort((a,b) => (parseInt(b.percentage) > parseInt(a.percentage)) ? 1 : -1))
+    }
+
     function handleRegisterClick(e) {
       setRegisterClicked(true)
       setLoginClicked(false)
       setLogoutClicked(false)
-
+      topScore()
     }
     function handleLoginClick(e) {
       setRegisterClicked(false)
       setLogoutClicked(false)
-
       setLoginClicked(true)
+      mostAttempt()
     }
     function handleLogoutClick(e) {
       setRegisterClicked(false)
       setLogoutClicked(true)
       setLoginClicked(false)
+      percentageHighest()
     }
   
     // if user is logged in we show profile else we show register or login page
@@ -127,11 +189,19 @@ function RankingScreen() {
                   <div className='nameText text'>Name</div>
                   <div className='scoreText text'>Score</div>
                   </div>
-              <div className='singleInputContainer'>
-                  <div className='rankText text'>1</div>
-                  <div className='nameText text'>Ahsan</div>
-                  <div className='scoreText text'>12</div>
+              
+                  {
+                      topScores.slice(0,5).map((data, index) => {
+                          return (
+                <div className='singleInputContainer'>
+                  <div className='rankText text'>{index + 1}</div>
+                  <div className='nameText text'>{data.name}</div>
+                  <div className='scoreText text'>{data.score}</div>
+                  
                   </div>
+                          )
+                      })
+                  }
               </div>
             </div>
 
@@ -144,13 +214,20 @@ function RankingScreen() {
               <div className='singleInputContainer headContainer'>
                   <div className='rankText text'>Rank</div>
                   <div className='nameText text'>Name</div>
-                  <div className='scoreText text'>Score</div>
+                  <div className='scoreText text'>Attempts</div>
                   </div>
-              <div className='singleInputContainer'>
-                  <div className='rankText text'>1</div>
-                  <div className='nameText text'>Ahsan</div>
-                  <div className='scoreText text'>12</div>
+                  {
+                      mostAttempts.slice(0,5).map((data, index) => {
+                          return (
+                <div className='singleInputContainer'>
+                  <div className='rankText text'>{index + 1}</div>
+                  <div className='nameText text'>{data.name}</div>
+                  <div className='scoreText text'>{data.attempts}</div>
+                  
                   </div>
+                          )
+                      })
+                  }
               </div>
             </div>
           </div>
@@ -162,13 +239,20 @@ function RankingScreen() {
               <div className='singleInputContainer headContainer'>
                   <div className='rankText text'>Rank</div>
                   <div className='nameText text'>Name</div>
-                  <div className='scoreText text'>Score</div>
+                  <div className='scoreText text'>% increase</div>
                   </div>
-              <div className='singleInputContainer'>
-                  <div className='rankText text'>1</div>
-                  <div className='nameText text'>Ahsan</div>
-                  <div className='scoreText text'>12</div>
+                  {
+                      highestPercentage.slice(0,5).map((data, index) => {
+                          return (
+                <div className='singleInputContainer'>
+                  <div className='rankText text'>{index + 1}</div>
+                  <div className='nameText text'>{data.name}</div>
+                  <div className='scoreText text'>{data.percentage}</div>
+                  
                   </div>
+                          )
+                      })
+                  }
               </div>
             </div>
           </div>

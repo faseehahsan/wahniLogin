@@ -12,7 +12,7 @@ function Login() {
   const user = useContext(UserContext);
 
 
-  const userLoggedIn = true //for test purposes
+  const userLoggedIn = false //for test purposes
 
   const [loginClicked, setLoginClicked] = useState(false);
   const [registerClicked, setRegisterClicked] = useState(false);

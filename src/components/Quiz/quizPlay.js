@@ -23,6 +23,7 @@ function Home() {
     
     const [score, setScore] = useState(0);    
     
+    // receive score hsitory from backend to send both score and percentage increase to backend for rankings
 
     const questions = [
 		{
