@@ -52,7 +52,7 @@ function Profile(props) {
           <div className='form'>
           <div className='profileImageContainer'>
           {
-            imageLoading ? <img src='https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif' alt="" /> : <img src={url} alt="" />
+            imageLoading ? <img src='https://media4.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif' alt="" /> : <img src={url} alt="" />
 
           }
           
