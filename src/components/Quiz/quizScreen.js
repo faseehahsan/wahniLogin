@@ -1,9 +1,12 @@
 import { Link } from 'react-router-dom';
-import React from 'react';
+import React, {useContext} from 'react';
 import './quizScreen.css';
+import { UserContext } from '../context/user1Context';
+
 
 function Home() {
-    
+
+    const user = useContext(UserContext);    
 
         return (
             <div className='appContainer'>
@@ -14,6 +17,13 @@ function Home() {
             <img src="https://image.flaticon.com/icons/png/512/27/27223.png" alt="" />
             <div className='quizScreenText'>PLAY</div>
             </Link>
+
+            {user.id === 'zOOj1gwSb7WQA7dwMBgW2EYJOk52' ? 
+                <Link className='quizNavContainer link' to='/Quiz/add'>
+                <img src="https://image.flaticon.com/icons/png/512/57/57108.png" alt="" />
+                <div className='quizScreenText'>QUESTIONS</div>
+                </Link> : <div></div>
+            }
 
             <Link className='quizNavContainer link' to='/Quiz/ranking'>
             <img src="https://image.flaticon.com/icons/png/512/13/13815.png" alt="" />

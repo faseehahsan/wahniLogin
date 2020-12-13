@@ -6,6 +6,8 @@ import QuizPlay from './components/Quiz/quizPlay'
 import Quiz from './components/Quiz/quizScreen'
 import RankingScreen from './components/Ranking/rankingScreen'
 import { UserContextProvider } from './components/context/user1Context';
+import { QuestionContextProvider } from './components/context/questionsContext';
+import AddDel from './components/questionsScreen/addDelQs'
 
 
 
@@ -20,7 +22,12 @@ function App() {
         <Route exact path='/' component={Home} />
           <Route exact path='/myAccount' component={MyAccount} />
           <Route exact path='/Quiz' component={Quiz} />
+
+          <QuestionContextProvider>
           <Route exact path='/Quiz/play' component={QuizPlay} />
+          <Route exact path='/Quiz/add' component={AddDel} />
+          </QuestionContextProvider>
+
           <Route exact path='/Quiz/ranking' component={RankingScreen} />
         </UserContextProvider>
       </Switch>

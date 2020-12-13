@@ -1,6 +1,7 @@
 import { Redirect, Link } from 'react-router-dom';
-import React, {useState, useContext } from 'react';
+import React, {useState, useContext, useEffect } from 'react';
 import { UserContext } from '../context/user1Context';
+import { QuestionContext } from '../context/questionsContext';
 import './quizScreen.css';
 import QuestionCard from './questionCard'
 
@@ -17,52 +18,28 @@ function Home() {
 
     // useContext is used to confirm if a user is loggedIn
     const user = useContext(UserContext);
+    const [qs, setqs] = useContext(QuestionContext);
 
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [showScore, setShowScore] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    // where 3 is the questions length
+    const randomNumber = Math.floor(Math.random()*qs.length);
     
-    const [score, setScore] = useState(0);    
+    const [score, setScore] = useState(0); 
+    const [questions, setQuestions] = useState(''); 
+
     
+    
+    useEffect(() => {
+        const shuffled = qs.sort(() => 0.5 - Math.random());
+// Get sub-array of first n elements after shuffled
+        let selected = shuffled.slice(0, 5);
+        setQuestions(selected)
+        setIsLoading(false);
+    }, [])
     // receive score hsitory from backend to send both score and percentage increase to backend for rankings
 
-    const questions = [
-		{
-			questionText: 'What is the capital of France?',
-			answerOptions: [
-				{ answerText: 'New York', isCorrect: false },
-				{ answerText: 'London', isCorrect: false },
-				{ answerText: 'Paris', isCorrect: true },
-				{ answerText: 'Dublin', isCorrect: false },
-			],
-		},
-		{
-			questionText: 'Who is CEO of Tesla?',
-			answerOptions: [
-				{ answerText: 'Jeff Bezos', isCorrect: false },
-				{ answerText: 'Elon Musk', isCorrect: true },
-				{ answerText: 'Bill Gates', isCorrect: false },
-				{ answerText: 'Tony Stark', isCorrect: false },
-			],
-		},
-		{
-			questionText: 'The iPhone was created by which company?',
-			answerOptions: [
-				{ answerText: 'Apple', isCorrect: true },
-				{ answerText: 'Intel', isCorrect: false },
-				{ answerText: 'Amazon', isCorrect: false },
-				{ answerText: 'Microsoft', isCorrect: false },
-			],
-		},
-		{
-			questionText: 'How many Harry Potter books are there?',
-			answerOptions: [
-				{ answerText: '1', isCorrect: false },
-				{ answerText: '4', isCorrect: false },
-				{ answerText: '6', isCorrect: false },
-				{ answerText: '7', isCorrect: true },
-			],
-		},
-	];
 
 	
 
@@ -91,7 +68,7 @@ function Home() {
 
     if (!user) return <Redirect to='/myAccount' />
 
-    if (user) {
+    if (user && !isLoading) {
         return (
         <div className='appContainer'>
                 {showScore ? (
@@ -116,6 +93,12 @@ function Home() {
                             numberOfQ={questions.length} />
                     </div>
                 )}
+            </div>
+        )
+    } else if (user && isLoading) {
+        return (
+            <div>
+                <h1>Loading.........</h1>
             </div>
         )
     }
