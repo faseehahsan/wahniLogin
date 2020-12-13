@@ -88,10 +88,11 @@ function Login() {
   }
 
   function CompleteProfile(nameInput) {
-    firebase.auth().currentUser.updateProfile({ 
-      displayName: nameInput     });
-     history.push('/Quiz');
+    firebase.auth().currentUser.updateProfile({displayName: nameInput}).then(function() {
+      history.push('/Quiz');
      window.location.reload();
+    });
+     
   }
   
 
