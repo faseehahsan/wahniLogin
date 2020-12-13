@@ -51,7 +51,7 @@ function Profile(props) {
     })
   }
 
-  if (user.name === null || user.name === '') {
+  if (user.name !== null || user.name !== '') {
     return(
       <div className='body'>
       <div className='login-container loginresponsive profileContainer'>
