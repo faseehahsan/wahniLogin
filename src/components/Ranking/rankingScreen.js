@@ -239,7 +239,7 @@ function RankingScreen() {
               <div className='singleInputContainer headContainer'>
                   <div className='rankText text'>Rank</div>
                   <div className='nameText text'>Name</div>
-                  <div className='scoreText text'>% increase</div>
+                  <div className='scoreText text'>Improvement</div>
                   </div>
                   {
                       highestPercentage.slice(0,5).map((data, index) => {

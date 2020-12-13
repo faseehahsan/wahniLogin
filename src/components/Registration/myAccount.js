@@ -3,6 +3,8 @@ import React, { useState, useContext } from 'react';
 import Profile from '../Profile/profile'
 import firebase from '../../firebase'
 import { UserContext } from '../context/user1Context';
+import { useHistory } from "react-router-dom";
+
 
 
 
@@ -11,9 +13,15 @@ import './app.css'
 
 function Login() {
 
+  
+  // confirm if user is available
+  const user = useContext(UserContext);
+
   const [inputName, setInputName] = useState('')
-  const [inputNumber1, setInputNumber1] = useState('')
   const [inputNumber2, setInputNumber2] = useState('')
+
+  const history = useHistory();
+
 
   // const user = useContext(UserContext);
 
@@ -56,14 +64,12 @@ function Login() {
           // User signed in successfully.
           alert('You are successfully signed In')
 
-          if(name) {
-            firebase.auth().currentUser.updateProfile({ displayName: name })
-          } else {
-            console.log('not updated')
+          var user1 = firebase.auth().currentUser;
+          if(user1.displayName !== null || user1.displayName === '') {
+            history.push('/Quiz');
           }
 
           setInputName('')
-          setInputNumber1('')
           setInputNumber2('')
           // ...
         }).catch(function (error) {
@@ -81,6 +87,12 @@ function Login() {
       });
   }
 
+  function CompleteProfile(nameInput) {
+    firebase.auth().currentUser.updateProfile({ 
+      displayName: nameInput     });
+     history.push('/Quiz');
+     window.location.reload();
+  }
   
 
   
@@ -94,31 +106,8 @@ function Login() {
   //   firebase.storage.ref('users/' + user.uid + '.jpg').put(file)
   // }
 
-  // confirm if user is available
-  const user = useContext(UserContext);
 
 
-
-  const [loginClicked, setLoginClicked] = useState(false);
-  const [registerClicked, setRegisterClicked] = useState(false);
-
-  const loginContainer1 = registerClicked ? 'login-container loginresponsive' : 'login-container loginresponsive hide-login';
-  const headerContainer1 = registerClicked ? 'header' : 'header headerHover';
-  const inputContainer1 = registerClicked ? 'input-container' : 'input-container hide-section';
-
-  const loginContainer2 = loginClicked ? 'login-container loginresponsive' : 'login-container loginresponsive hide-login';
-  const headerContainer2 = loginClicked ? 'header' : 'header headerHover';
-  const inputContainer2 = loginClicked ? 'input-container' : 'input-container hide-section';
-
-
-  function handleRegisterClick(e) {
-    setRegisterClicked(true)
-    setLoginClicked(false)
-  }
-  function handleLoginClick(e) {
-    setRegisterClicked(false)
-    setLoginClicked(true)
-  }
 
   // if user is logged in we show profile else we show register or login page
 
@@ -127,40 +116,21 @@ function Login() {
       <div className='body'>
         <img src="https://image.flaticon.com/icons/png/512/2922/2922532.png" alt="" />
         <p className='descriptionText'></p>
-        <div className={loginContainer1}>
+        
+
+
+        <div className='login-container loginresponsive'>
           <form className='form' onSubmit={(e) => e.preventDefault()}>
-            <div className={headerContainer1} onClick={handleRegisterClick}>R E G I S T E R</div>
-            <div className={inputContainer1}>
-            
-              <p>
-              <p className='inputDescription'>Name</p>
-              <input type="text" value={inputName} onChange={e => setInputName(e.target.value)} placeholder="Your name (e.g. John)" name="name" />
-              </p>
-
-              <p>
-              <p className='inputDescription'>Number</p>
-              <input type="number" value={inputNumber1} onChange={e => setInputNumber1(e.target.value)} placeholder="Country code + Number (e.g. 918456154658)" name="mobile" />
-              </p>
-              <p onClick={() => onSignInSubmit(inputNumber1, inputName)} className='button1'>SIGN UP</p>
-            </div>
-          </form>
-        </div>
-
-        <div id="recaptcha-container"></div>
-
-        <div className={loginContainer2}>
-          <form className='form' onSubmit={(e) => e.preventDefault()}>
-            <div className={headerContainer2} onClick={handleLoginClick}>L O G I N</div>
-            <div className={inputContainer2}>
+            <div className='header'>L O G I N</div>
+            <div className='input-container'>
               <p>
               <p className='inputDescription'>Mobile Number</p>
               <input value={inputNumber2} onChange={e => setInputNumber2(e.target.value)} type="number" placeholder="Country code + Number (e.g. 918456154658)" name="mobile" />
               </p>
               <p className='button1' type='button' onClick={() => onSignInSubmit(inputNumber2)}>SIGN IN</p>
-             
-
-
             </div>
+            <div id="recaptcha-container"></div>
+
 
           </form>
         </div>
@@ -171,7 +141,7 @@ function Login() {
   } else {
     return (
       <div>
-        <Profile user={user} logout={logout} />
+        <Profile completeProfile={CompleteProfile} user={user} logout={logout} />
       </div>
     )
   }

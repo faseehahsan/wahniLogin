@@ -62,20 +62,23 @@ function QuestionCard(props) {
                     {questions.answerOptions.map((answerOption) => (
                         <button className={selectedTrue(answerOption.answerText, currentQuestion)} id='answerButton' onClick={() => {
                             newSelectedAnswerArray(answerOption.answerText, currentQuestion, answerOption.isCorrect);
+                            nextQ();
                         }}>
                             {answerOption.answerText}
                         </button>
                     ))}
                 </div>
 
+                <div className='next-and-prev-buttonsContainer'>
+                    <div className='button1' onClick={prevQ}>PREV</div>
+                    <div className='button1' onClick={nextQ}>Pass</div>
+                </div>
+
                 <div className='submitButtonContainer'>
                     <div className='submitButton' onClick={() => submitQ(correctAnswer.filter(data => data === true).length)}>Submit</div>
                 </div>
 
-                <div className='next-and-prev-buttonsContainer'>
-                    <div className='button1' onClick={prevQ}>Go back</div>
-                    <div className='button1' onClick={nextQ}>Next</div>
-                </div>
+                
 
                 
             </div>
