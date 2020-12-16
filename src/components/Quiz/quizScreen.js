@@ -8,7 +8,7 @@ function Home() {
 
     const user = useContext(UserContext);
 
-    // 3 icons linking to play, rankings and admin dashboard to add questions only for admin
+    // 3 icons' linking to play, rankings and admin dashboard to add questions only for admin
 
         return (
             <div className='appContainer'>
