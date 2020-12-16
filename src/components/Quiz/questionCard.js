@@ -6,29 +6,34 @@ function QuestionCard(props) {
 
     const { currentQuestion, questions, prevQ, nextQ, submitQ, numberOfQ } = props
 
-    const [selectedAnswer, setSelectedAnswer] = useState([]);
+    // set an array of true or false and filter it to send it on submitQ
     const [correctAnswer, setCorrectAnswer] = useState([]);
+    const score = correctAnswer.filter(data => data === true).length;
 
-    const [timeOver, setTimeOver] = useState(false);
-
-
-
-    function selectedTrue(clickedAnswer, indexure) {
+    // set an array of answers that are selected in the order of questions appearing to set style to seleceted answers
+    const [selectedAnswer, setSelectedAnswer] = useState([]);
+    function selectedAnswerClassName(clickedAnswer, indexure) {
+        // to set style to clicked answers check if any of those answers are already clicked and set in the selectedAnswer array
         if (clickedAnswer === selectedAnswer[indexure]) {
             return 'button-selected'
         }
     }
 
-    function newSelectedAnswerArray(answer, indexure, isCorrect) {
+    function answerClickHandler(answer, indexure, isCorrect) {
+        // set selectedAnswer and CorrectAnswer arrays each time an answer is selected
         const newArray = [...selectedAnswer];
         newArray[indexure] = answer;
         setSelectedAnswer(newArray)
 
         const newArray1 = [...correctAnswer];
         newArray1[indexure] = isCorrect;
-        setCorrectAnswer(newArray1)
+        setCorrectAnswer(newArray1);
+        // navigate to next Question
+        nextQ();
     }
 
+    //check if time is OVER
+    const [timeOver, setTimeOver] = useState(false);
 
     if (timeOver) {
         return (
@@ -60,10 +65,11 @@ function QuestionCard(props) {
                 </div>
                 <div className='answer-section'>
                     {questions.answerOptions.map((answerOption) => (
-                        <button className={selectedTrue(answerOption.answerText, currentQuestion)} id='answerButton' onClick={() => {
-                            newSelectedAnswerArray(answerOption.answerText, currentQuestion, answerOption.isCorrect);
-                            nextQ();
-                        }}>
+                        <button 
+                            className={selectedAnswerClassName(answerOption.answerText, currentQuestion)} 
+                            id='answerButton' 
+                            onClick={() => {answerClickHandler(answerOption.answerText, currentQuestion, answerOption.isCorrect)}}
+                            >
                             {answerOption.answerText}
                         </button>
                     ))}
@@ -75,7 +81,7 @@ function QuestionCard(props) {
                 </div>
 
                 <div className='submitButtonContainer'>
-                    <div className='submitButton' onClick={() => submitQ(correctAnswer.filter(data => data === true).length)}>Submit</div>
+                    <div className='submitButton' onClick={() => submitQ(score)}>Submit</div>
                 </div>
 
                 

@@ -26,7 +26,6 @@ function Timer(props) {
         
       }, [timeOver]);
 
-    const [started, setStarted] = useState(false);
 
   return (
    

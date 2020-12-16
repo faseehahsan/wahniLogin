@@ -7,42 +7,32 @@ import QuestionCard from './questionCard'
 
 function Home() {
 
-    // inside useEffect we use fetch API to call in the questions and save in const questions
-
-    // useEffect(() => {
-    //     effect
-    //     return () => {
-    //         cleanup
-    //     }
-    // }, [input])
-
     // useContext is used to confirm if a user is loggedIn
     const user = useContext(UserContext);
+    // questions received from questionContext
     const [qs, setqs] = useContext(QuestionContext);
-
-    const [currentQuestion, setCurrentQuestion] = useState(0);
-    const [showScore, setShowScore] = useState(false);
+    // shuffled questions
+    const [questions, setQuestions] = useState('');
     const [isLoading, setIsLoading] = useState(true);
-    // where 3 is the questions length
-    const randomNumber = Math.floor(Math.random()*qs.length);
-    
-    const [score, setScore] = useState(0); 
-    const [questions, setQuestions] = useState(''); 
 
-    
-    
     useEffect(() => {
+        // on component load, from the qs, array the questions are shuffled and randomized
+        setIsLoading(true);
+        // Get sub-array of first n elements after shuffled
         const shuffled = qs.sort(() => 0.5 - Math.random());
-// Get sub-array of first n elements after shuffled
         let selected = shuffled.slice(0, 5);
-        setQuestions(selected)
+        setQuestions(selected);
         setIsLoading(false);
     }, [])
-    // receive score hsitory from backend to send both score and percentage increase to backend for rankings
 
-
-	
-
+    // question Index to be shown to the user
+    const [currentQuestion, setCurrentQuestion] = useState(0);
+    // calculate scores=
+    const [score, setScore] = useState(0); 
+    // when timeOut or onSubmit the score is shown (showscore set to true)
+    const [showScore, setShowScore] = useState(false);
+    
+    // fetch score hsitory of user from backend to send both score and percentage increase to backend for rankings
 
     function nextQ() { 
         const nextQuestion = currentQuestion + 1;
@@ -65,7 +55,6 @@ function Home() {
     }
 
     // if there is no user logged in this is redirected to myAccount for login or register
-
     if (!user) return <Redirect to='/myAccount' />
 
     if (user && !isLoading) {

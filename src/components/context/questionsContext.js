@@ -16,12 +16,7 @@ const QuestionConsumer = QuestionContext.Consumer;
 export function QuestionContextProvider(props) {
 
 
-    useEffect(() => {
-        console.log('rendered')
-        
-    }, [])
-
-
+    // on useEffect fetch questions from the backend and save it in 'qs'
 
     const [qs, setqs] = useState([
             {
@@ -106,15 +101,6 @@ export function QuestionContextProvider(props) {
                 ],
             },
     ])
-
-  
-
-
-  // on useEffect user is authorized and user details are set and sent via context API to all components
-
-//   useEffect(() => {
-//     setRa
-//   }, []);
   
   return (
     <QuestionProvider value={[qs, setqs]}>

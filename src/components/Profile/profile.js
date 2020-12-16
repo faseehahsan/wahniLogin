@@ -7,9 +7,6 @@ import * as Yup from "yup";
 
 import "../questionsScreen/questionScreen.css";
 
-
-
-
 function Profile(props) {
 
   
@@ -17,8 +14,10 @@ function Profile(props) {
   const [url, setUrl] = useState();
   const [imageLoading, setImageLoading] = useState(true);
 
+
   useEffect(() => {
     setImageLoading(true);
+    // check if user object has a url for profile image
     if(user.photoURL !== null) {
     setUrl(user.photoURL)
     } else {
@@ -28,8 +27,10 @@ function Profile(props) {
   }, [])
 
   function profilePicUpdate(file) {
+    // to update the profile picture
     setImageLoading(true);
     firebase.storage().ref('users/' + user.id + '.jpg').put(file).then(ell => {
+      // get the url of the image uploaded to firebase
       getURL()
     }).catch(err => {
       alert(err);
@@ -38,6 +39,7 @@ function Profile(props) {
   }
 
   function getURL() {
+    // get the url of the image uploaded to firebase
     firebase.storage().ref().child("users/" + user.id + '.jpg').getDownloadURL().then(url1 => {
       console.log(url1);
       setUrl(url1);
@@ -51,10 +53,13 @@ function Profile(props) {
     })
   }
 
-  if (user.name !== null || user.name !== '') {
+  //check if user object has a name
+  //if NO name, complete registration form is shown else Profile is shown
+  
+  if (user.name === null || user.name === '') {
     return(
       <div className='body'>
-      <div className='login-container loginresponsive profileContainer'>
+      <div className='login-container card1 responsiveWidth profileContainer'>
         <div className='form'>
         <div className='profileImageContainer'>
         {
@@ -104,8 +109,8 @@ function Profile(props) {
                     onBlur={handleBlur}
                     className={
                       errors.nameInput && touched.nameInput
-                        ? "text-input error"
-                        : "text-input"
+                        ? "inputStyle error"
+                        : "inputStyle"
                     }
                   />
                   <div style={{marginLeft: '8%'}}>
@@ -132,7 +137,7 @@ function Profile(props) {
   } else {
     return (
       <div className='body'>
-      <div className='login-container loginresponsive profileContainer'>
+      <div className='login-container card1 loginresponsive profileContainer'>
         <div className='form'>
         <div className='profileImageContainer'>
         {
@@ -150,7 +155,9 @@ function Profile(props) {
         <p className='profileText'>Phone No.: {user.number}</p>
         <p className='profileText'>No. of Attempts: </p>
         <p className='profileText'>Highest Score: </p>
-        <p className='button1' type='button' onClick={() => logout()}>LOGOUT</p>
+        <div className='flexCenter'>
+        <div className='button1' type='button' onClick={() => logout()}>LOGOUT</div>
+        </div>
 
         </div>
 

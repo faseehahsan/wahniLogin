@@ -1,3 +1,9 @@
+.flexCenter{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .body {
     background: linear-gradient(45deg, #5ca54b, #000000);
     font-family: "Open Sans", sans-serif;
@@ -14,29 +20,34 @@
     font-size: 16px;
 }
 
-img {
-    width: 80px;
+.smallImageContainer {
+    width: 60px;
+    height: 60px;
     border-radius: 20%;
     padding: 5px;
     box-shadow: 0 2px 6px #0e3805;
 }
 
-.login-container {
+.card1 {
+    background: #5ca54b;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
+    align-items: center;
+    /* flex: 1; */
     margin-bottom: 5px;
-    width: 400px;
-    font-size: 16px;
+    /* font-size: 16px; */
     box-shadow: 0 5px 6px #00000036;
     border-radius: 22px;
     overflow: hidden;
     transition: 1s;
+}
+
+.loginContainerSize {
+    width: 400px;
     height: 300px;
 }
 
-.loginresponsive {
-    width: 400px
-}
+
 
 .profileContainer {
     width: 500px;
@@ -71,6 +82,7 @@ img {
 
 .profileText {
     margin-left: 7%;
+    padding: 12px;
 }
 
 .labelClass {
@@ -103,13 +115,15 @@ img {
 
 
 .form {
+    height: 100%;
+    width: 100%;
     display: flex;
     flex-direction: column;
-    background: #5ca54b;
     transition: 1s;
     flex:1;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
+    
 }
 
 .header {
@@ -123,6 +137,8 @@ img {
     font-size: 30px;
     font-weight: bold;
     transition: 1s;
+    padding-top: 5px;
+    /* margin-top: 15px; */
 }
 
 .headerHover{
@@ -139,39 +155,42 @@ img {
     opacity: 1;
     transition: 1s;
     width: 100%;
+    /* margin-left: 10%; */
+
 }
 
 .inputDescription {
     margin: 0px;
     padding: 0px;
-    margin-left: 8%;
-    position: relative;
+    margin-left: 11%;
+    /* position: relative; */
     font-size: 12px;
-
+    margin-bottom: 5px;
 }
 
-.login-container p {
-    padding: 12px;
-}
 
-.login-container input {
+.inputStyle {
     width: 80%;
+    margin: 0;
+    
     margin-left: 10%;
+    /* margin-right: 10%; */
     align-self: center;
-    border-width: 1px;
     border-style: solid;
     outline: 0;
     font-size: 0.95em;
     color: black;
     border: none;
     background-color: transparent;
-    border-bottom: 1px solid #5e53533b;
+    border-bottom: 2px solid #5e53533b;
+    border-left: 1px solid #5e53533b;
     padding-bottom: 3px;
     padding-left: 5px;
     margin-bottom: 3px;
+    
 }
 
-.login-container input:focus {
+.inputStyle:focus {
     border-color:  #cfd8cd;
 }
 
@@ -192,7 +211,8 @@ input[type=number] {
 .button1 {
     background: #225218;
     width: 200px;
-    margin: auto;
+    margin: 0;
+    /* padding: 0; */
     color: white;
     border-radius: 22px;
     cursor: pointer;
@@ -200,6 +220,7 @@ input[type=number] {
     letter-spacing: 0.2em;
     text-align: center;
     transition: 0.5s;
+    align-self: center;
 }
 
 .button1:hover{
@@ -214,14 +235,9 @@ input[type=number] {
 }
 
 @media screen and (max-width: 500px) {
-    .loginresponsive {
+    .responsiveWidth {
         width: 300px
     }     
-
-    .profileContainer {
-        width: 300px;
-        /* height: auto; */
-    }
 }
 
 .hide-login {

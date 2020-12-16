@@ -6,12 +6,13 @@ import { UserContext } from '../context/user1Context';
 
 function Home() {
 
-    const user = useContext(UserContext);    
+    const user = useContext(UserContext);
+
+    // 3 icons linking to play, rankings and admin dashboard to add questions only for admin
 
         return (
             <div className='appContainer'>
             <div className='quizScreenContainer'>
-            
             
             <Link className='quizNavContainer link' to='/Quiz/play'>
             <img src="https://image.flaticon.com/icons/png/512/27/27223.png" alt="" />

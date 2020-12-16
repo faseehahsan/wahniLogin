@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import './rankingScreen.css'
-import '../Registration/app.css'
+import '../Registration/myAccount.css'
 
 function RankingScreen() {
 
-    // receive scores from backend
+    // on useEffect fetch user scores from the backEnd
 
     const rankings = [
         {
@@ -97,26 +97,29 @@ function RankingScreen() {
 
     ]
    
-    const [loginClicked, setLoginClicked] = useState(false);
-    const [registerClicked, setRegisterClicked] = useState(false);
-    const [logoutClicked, setLogoutClicked] = useState(false);
-    
+    //all these contribute to UI for the animation effect
+    //START
+    const [mostAttemptsClicked, setmostAttemptsClicked] = useState(false);
+    const [topScorersClicked, settopScorersClicked] = useState(false);
+    const [topPerformersCLicked, settopPerformersCLicked] = useState(false);
+  
+    const loginContainer1 = topScorersClicked ? 'login-container card1 responsiveWidth loginContainerSize': 'login-container card1 loginresponsive hide-login';
+    const headerContainer1 = topScorersClicked ? 'header': 'header headerHover';
+    const rankTable1 = topScorersClicked ? 'rankTable' : 'rankTable hide-section';
+  
+    const loginContainer2 = mostAttemptsClicked ? 'login-container card1 responsiveWidth loginContainerSize': 'login-container card1 loginresponsive hide-login';
+    const headerContainer2 = mostAttemptsClicked ? 'header': 'header headerHover';
+    const rankTable2 = mostAttemptsClicked ? 'rankTable' : 'rankTable hide-section';
+
+    const loginContainer3 = topPerformersCLicked ? 'login-container card1 responsiveWidth loginContainerSize': 'login-container card1 loginresponsive hide-login';
+    const headerContainer3 = topPerformersCLicked ? 'header': 'header headerHover';
+    const rankTable3 = topPerformersCLicked ? 'rankTable' : 'rankTable hide-section';
+
+    //Logic Calculation to get Ranking of each types
     const [topScores, setTopScores] = useState([]);
     const [mostAttempts, setMostAttempts] = useState([]);
     const [highestPercentage, setHighestPercentage] = useState([]);
-  
-    const loginContainer1 = registerClicked ? 'login-container loginresponsive': 'login-container loginresponsive hide-login';
-    const headerContainer1 = registerClicked ? 'header': 'header headerHover';
-    const rankTable1 = registerClicked ? 'rankTable' : 'rankTable hide-section';
-  
-    const loginContainer2 = loginClicked ? 'login-container loginresponsive': 'login-container loginresponsive hide-login';
-    const headerContainer2 = loginClicked ? 'header': 'header headerHover';
-    const rankTable2 = loginClicked ? 'rankTable' : 'rankTable hide-section';
 
-    const loginContainer3 = logoutClicked ? 'login-container loginresponsive': 'login-container loginresponsive hide-login';
-    const headerContainer3 = logoutClicked ? 'header': 'header headerHover';
-    const rankTable3 = logoutClicked ? 'rankTable' : 'rankTable hide-section';
-    
     function topScore() {
         const newArray = [];
         rankings.map(data => {
@@ -156,24 +159,27 @@ function RankingScreen() {
         setHighestPercentage(newArray.sort((a,b) => (parseInt(b.percentage) > parseInt(a.percentage)) ? 1 : -1))
     }
 
-    function handleRegisterClick(e) {
-      setRegisterClicked(true)
-      setLoginClicked(false)
-      setLogoutClicked(false)
-      topScore()
-    }
-    function handleLoginClick(e) {
-      setRegisterClicked(false)
-      setLogoutClicked(false)
-      setLoginClicked(true)
-      mostAttempt()
-    }
-    function handleLogoutClick(e) {
-      setRegisterClicked(false)
-      setLogoutClicked(true)
-      setLoginClicked(false)
-      percentageHighest()
-    }
+    //Click Handlers of each ranking Components
+    function handleTopScoreClick(e) {
+        settopScorersClicked(true)
+        setmostAttemptsClicked(false)
+        settopPerformersCLicked(false)
+        topScore()
+      }
+      function handleMostAttemptClick(e) {
+        settopScorersClicked(false)
+        settopPerformersCLicked(false)
+        setmostAttemptsClicked(true)
+        mostAttempt()
+      }
+      function handleTopPerformerClick(e) {
+        settopScorersClicked(false)
+        settopPerformersCLicked(true)
+        setmostAttemptsClicked(false)
+        percentageHighest()
+      }
+
+    
   
     // if user is logged in we show profile else we show register or login page
   
@@ -182,7 +188,7 @@ function RankingScreen() {
         <div className='body'>
           <div className={loginContainer1}>
             <div className='form'>
-            <div className={headerContainer1} onClick={handleRegisterClick}>TOP SCORES</div>
+            <div className={headerContainer1} onClick={handleTopScoreClick}>TOP SCORES</div>
               <div className={rankTable1}>
               <div className='singleInputContainer headContainer'>
                   <div className='rankText text'>Rank</div>
@@ -209,7 +215,7 @@ function RankingScreen() {
           </div>
           <div className={loginContainer2}>
             <div className='form'>
-            <div className={headerContainer2} onClick={handleLoginClick}>MOST ATTEMPTS</div>
+            <div className={headerContainer2} onClick={handleMostAttemptClick}>MOST ATTEMPTS</div>
               <div className={rankTable2}>
               <div className='singleInputContainer headContainer'>
                   <div className='rankText text'>Rank</div>
@@ -234,7 +240,7 @@ function RankingScreen() {
 
           <div className={loginContainer3}>
             <div className='form'>
-            <div className={headerContainer3} onClick={handleLogoutClick}>TOP PERFORMERS</div>
+            <div className={headerContainer3} onClick={handleTopPerformerClick}>TOP PERFORMERS</div>
               <div className={rankTable3}>
               <div className='singleInputContainer headContainer'>
                   <div className='rankText text'>Rank</div>
