@@ -9,12 +9,7 @@ import 'firebase/storage';
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBSjXNfUFdgJn3qCJPG3qWd5WEBTBKCICU",
-    authDomain: "wahnilogin.firebaseapp.com",
-    projectId: "wahnilogin",
-    storageBucket: "wahnilogin.appspot.com",
-    messagingSenderId: "571694906479",
-    appId: "1:571694906479:web:908412aa21b16453d7619a"
+  // configuration details
 };
 
 if (!firebase.apps.length) {
