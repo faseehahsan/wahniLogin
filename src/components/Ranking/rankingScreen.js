@@ -103,17 +103,17 @@ function RankingScreen() {
     const [topScorersClicked, settopScorersClicked] = useState(false);
     const [topPerformersCLicked, settopPerformersCLicked] = useState(false);
   
-    const loginContainer1 = topScorersClicked ? 'login-container card1 responsiveWidth loginContainerSize': 'login-container card1 loginresponsive hide-login';
-    const headerContainer1 = topScorersClicked ? 'header': 'header headerHover';
-    const rankTable1 = topScorersClicked ? 'rankTable' : 'rankTable hide-section';
+    const loginContainer1 = topScorersClicked ? 'rankCard rankCardHeight400': 'rankCard rankCardHeight60';
+    const headerContainer1 = topScorersClicked ? 'rankHeaderDiv': 'rankHeaderDiv rankHeaderDivClick';
+    const rankTable1 = topScorersClicked ? 'rankTable' : 'hide-section1';
   
-    const loginContainer2 = mostAttemptsClicked ? 'login-container card1 responsiveWidth loginContainerSize': 'login-container card1 loginresponsive hide-login';
-    const headerContainer2 = mostAttemptsClicked ? 'header': 'header headerHover';
-    const rankTable2 = mostAttemptsClicked ? 'rankTable' : 'rankTable hide-section';
+    const loginContainer2 = mostAttemptsClicked ? 'rankCard rankCardHeight400': 'rankCard rankCardHeight60';
+    const headerContainer2 = mostAttemptsClicked ? 'rankHeaderDiv': 'rankHeaderDiv rankHeaderDivClick';
+    const rankTable2 = mostAttemptsClicked ? 'rankTable' : 'rankTable hide-section1';
 
-    const loginContainer3 = topPerformersCLicked ? 'login-container card1 responsiveWidth loginContainerSize': 'login-container card1 loginresponsive hide-login';
-    const headerContainer3 = topPerformersCLicked ? 'header': 'header headerHover';
-    const rankTable3 = topPerformersCLicked ? 'rankTable' : 'rankTable hide-section';
+    const loginContainer3 = topPerformersCLicked ? 'rankCard rankCardHeight400': 'rankCard rankCardHeight60';
+    const headerContainer3 = topPerformersCLicked ? 'rankHeaderDiv': 'rankHeaderDiv rankHeaderDivClick';
+    const rankTable3 = topPerformersCLicked ? 'rankTable' : 'rankTable hide-section1';
 
     //Logic Calculation to get Ranking of each types
     const [topScores, setTopScores] = useState([]);
@@ -185,82 +185,89 @@ function RankingScreen() {
   
     
       return (
-        <div className='body'>
+        <div className='body fontMontserrat'>
           <div className={loginContainer1}>
-            <div className='form'>
-            <div className={headerContainer1} onClick={handleTopScoreClick}>TOP SCORES</div>
+            {/* <div className='form'> */}
+            <div className={headerContainer1} onClick={handleTopScoreClick}>
+                <p className='wahniColor'>Top <b>Scores</b></p>
+                </div>
               <div className={rankTable1}>
-              <div className='singleInputContainer headContainer'>
-                  <div className='rankText text'>Rank</div>
-                  <div className='nameText text'>Name</div>
-                  <div className='scoreText text'>Score</div>
+              <div className='singleRankRow'>
+                  <div className='rankText rankTextStyle'>Rank</div>
+                  <div className='nameText rankTextStyle'>Name</div>
+                  <div className='scoreText rankTextStyle'>Score</div>
                   </div>
               
                   {
                       topScores.slice(0,5).map((data, index) => {
                           return (
-                <div className='singleInputContainer'>
-                  <div className='rankText text'>{index + 1}</div>
-                  <div className='nameText text'>{data.name}</div>
-                  <div className='scoreText text'>{data.score}</div>
+                <div className='singleRankRow'>
+                  <div className='rankText rankTextStyle'>{index + 1}</div>
+                  <div className='nameText rankTextStyle'>{data.name}</div>
+                  <div className='scoreText rankTextStyle'>{data.score}</div>
                   
                   </div>
                           )
                       })
                   }
-              </div>
+              {/* </div> */}
             </div>
 
 
           </div>
           <div className={loginContainer2}>
-            <div className='form'>
-            <div className={headerContainer2} onClick={handleMostAttemptClick}>MOST ATTEMPTS</div>
+            {/* <div className='form'> */}
+            <div className={headerContainer2} onClick={handleMostAttemptClick}>
+            <p className='wahniColor'>Most <b>Attempts</b></p>
+                </div>
               <div className={rankTable2}>
-              <div className='singleInputContainer headContainer'>
-                  <div className='rankText text'>Rank</div>
-                  <div className='nameText text'>Name</div>
-                  <div className='scoreText text'>Attempts</div>
+              <div className='singleRankRow'>
+                  <div className='rankText rankTextStyle'>Rank</div>
+                  <div className='nameText rankTextStyle'>Name</div>
+                  <div className='scoreText rankTextStyle'>Attempts</div>
                   </div>
                   {
                       mostAttempts.slice(0,5).map((data, index) => {
                           return (
-                <div className='singleInputContainer'>
-                  <div className='rankText text'>{index + 1}</div>
-                  <div className='nameText text'>{data.name}</div>
-                  <div className='scoreText text'>{data.attempts}</div>
+                <div className='singleRankRow'>
+                  <div className='rankText rankTextStyle'>{index + 1}</div>
+                  <div className='nameText rankTextStyle'>{data.name}</div>
+                  <div className='scoreText rankTextStyle'>{data.attempts}</div>
                   
                   </div>
                           )
                       })
                   }
               </div>
-            </div>
+            {/* </div> */}
           </div>
 
           <div className={loginContainer3}>
-            <div className='form'>
-            <div className={headerContainer3} onClick={handleTopPerformerClick}>TOP PERFORMERS</div>
+            {/* <div className='form'> */}
+            <div className={headerContainer3} onClick={handleTopPerformerClick}>
+            <p className='wahniColor'>Top <b>Performers</b></p>
+
+                </div>
               <div className={rankTable3}>
-              <div className='singleInputContainer headContainer'>
-                  <div className='rankText text'>Rank</div>
-                  <div className='nameText text'>Name</div>
-                  <div className='scoreText text'>Improvement</div>
+              <div className='singleRankRow'>
+                  <div className='rankText rankTextStyle'>Rank</div>
+                  <div className='nameText rankTextStyle'>Name</div>
+                  <div className='scoreText rankTextStyle'>Improvement</div>
                   </div>
                   {
                       highestPercentage.slice(0,5).map((data, index) => {
                           return (
-                <div className='singleInputContainer'>
-                  <div className='rankText text'>{index + 1}</div>
-                  <div className='nameText text'>{data.name}</div>
-                  <div className='scoreText text'>{data.percentage}</div>
+                <div className='singleRankRow'>
+                  <div className='rankText rankTextStyle'>{index + 1}</div>
+                  <div className='nameText rankTextStyle'>{data.name}</div>
+                  <div className='scoreText rankTextStyle'>{data.percentage}</div>
                   
                   </div>
                           )
                       })
                   }
               </div>
-            </div>
+            {/* </div> */}
           </div>
     
           

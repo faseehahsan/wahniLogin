@@ -4,6 +4,7 @@ import { UserContext } from '../context/user1Context';
 import { QuestionContext } from '../context/questionsContext';
 import './quizScreen.css';
 import QuestionCard from './questionCard'
+import Loader from '../../globalComponents/loader'
 
 function Home() {
 
@@ -34,11 +35,12 @@ function Home() {
     
     // fetch score hsitory of user from backend to send both score and percentage increase to backend for rankings
 
-    function nextQ() { 
-        const nextQuestion = currentQuestion + 1;
-        if (nextQuestion < questions.length) {
-			setCurrentQuestion(nextQuestion);
-		}
+    function nextQ(nextQuestion) { 
+        setCurrentQuestion(nextQuestion);
+
+        // const nextQuestion = currentQuestion + 1;
+        // if (nextQuestion < questions.length) {
+		// }
     }
     function prevQ() {
         if (currentQuestion > 0) {
@@ -48,8 +50,8 @@ function Home() {
     }
 
     function submitQ(score) {
-        setShowScore(true);
         setScore(score)
+        setShowScore(true);
 
         // score with user id is sent to backEnd to store with new Date()
     }
@@ -59,35 +61,23 @@ function Home() {
 
     if (user && !isLoading) {
         return (
-        <div className='appContainer'>
-                {showScore ? (
-                    <div className='app score'>
-                    <div className='score-header'>Congratulations !!!</div>
-                    <div className='score-message'>
-                    You scored {score} out of {questions.length}
-                    </div>
-                    <div>
-                        <Link className='link button1' to='/Quiz'>Retry</Link>
-                    </div>
-                    </div>
-
-                ) : (
-                    <div className='app'>
+        <div className='body'>
+                    <div className='questionDiv'>
                         <QuestionCard 
                             currentQuestion={currentQuestion} 
-                            questions={questions[currentQuestion]} 
+                            questions={questions} 
                             prevQ={prevQ} 
                             nextQ={nextQ}
                             submitQ={submitQ}
-                            numberOfQ={questions.length} />
+                            numberOfQ={questions.length}
+                            showScore={showScore} />
                     </div>
-                )}
             </div>
         )
     } else if (user && isLoading) {
         return (
-            <div>
-                <h1>Loading.........</h1>
+            <div className='flexCenter body'>
+                <Loader borderWidth='5px' width='50px'/>
             </div>
         )
     }

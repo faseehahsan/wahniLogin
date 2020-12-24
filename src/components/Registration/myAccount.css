@@ -1,19 +1,6 @@
-.flexCenter{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
-.body {
-    background: linear-gradient(45deg, #5ca54b, #000000);
-    font-family: "Open Sans", sans-serif;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    padding-top: 10px;
-}
+
+
 
 
 .descriptionText{
@@ -29,15 +16,15 @@
 }
 
 .card1 {
-    background: #5ca54b;
+    /* background: #5ca54b; */
     display: flex;
     justify-content: center;
     align-items: center;
     /* flex: 1; */
     margin-bottom: 5px;
     /* font-size: 16px; */
-    box-shadow: 0 5px 6px #00000036;
-    border-radius: 22px;
+    box-shadow: 1px 1px 5px 2px #00000036;
+    border-radius: 15px;
     overflow: hidden;
     transition: 1s;
 }
@@ -127,12 +114,13 @@
 }
 
 .header {
+    font-family:Arial, Helvetica, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     width: 300px;
     border-radius: 10px;
-    color: white;
+    color: rgb(94, 86, 86);
     text-align: center;
     font-size: 30px;
     font-weight: bold;
@@ -194,11 +182,11 @@
     border-color:  #cfd8cd;
 }
 
-::placeholder {
+/* ::placeholder {
     color: #134208;
     opacity: 1;
     font-size: 12px;
-  }
+  } */
 
   input::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -241,7 +229,99 @@ input[type=number] {
 }
 
 .hide-login {
-    width: 300px;
+    /* width: 300px; */
     height: 60px;
+    width: 80%;
+  max-width: 600px;
 }
 
+/* this is START */
+
+.blank100 {
+    height: 100px;
+}
+.cardOneAdd {
+    flex-direction: column;
+}
+
+.loginSection {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    /* height: min-content; */
+    height: 200px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.headerLogin {
+    margin: 0;
+    color: rgb(94, 86, 86);
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    transition: 1s;
+    /* padding-top: 5px; */
+    /* flex: 2; */
+}
+
+
+.numberInputContainer {
+    /* flex: 2; */
+    width: 80%;
+    max-width: 350px;
+    /* display: flex; */
+
+
+}
+
+.numberInputContainer p{
+    margin: 0;
+    padding-left: 5px;
+    font-size: 15px;
+    color: rgb(97, 92, 92);
+    padding-bottom: 2px;
+}
+
+.numberInput {
+    width: 100%;
+    border: 2px solid rgb(100, 98, 98);
+    padding: 8px 0px 8px 10px;
+    outline: none;
+    border-radius: 12px;
+    font-size: 15px;
+}
+
+::placeholder {
+    font-size: 12px;
+    padding-left: 5px;
+}
+
+#recaptcha-container {
+    /* flex: 1; */
+    /* margin: 10px 0px 10px 0px; */
+    height: 100px;
+    /* border-radius: 22px;
+    overflow: hidden; */
+    /* height: 50px; */
+    /* display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid grey;
+    width: min-content; */
+}
+
+.signInButton {
+    letter-spacing: 0.1em;
+    height: 33px;
+    width: 50%;
+    max-width: 300px;
+    color: white;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.5s;
+    border-radius: 10px;
+    font-weight: bold;
+}

@@ -8,6 +8,8 @@ import RankingScreen from './components/Ranking/rankingScreen'
 import { UserContextProvider } from './components/context/user1Context';
 import { QuestionContextProvider } from './components/context/questionsContext';
 import AddDel from './components/questionsScreen/addDelQs'
+import './components/styles/globalStyles.css'
+import Footer from './components/footer/footer'
 
 
 
@@ -31,6 +33,7 @@ function App() {
           <Route exact path='/Quiz/ranking' component={RankingScreen} />
         </UserContextProvider>
       </Switch>
+      <Footer />
     </HashRouter>
 
   );
