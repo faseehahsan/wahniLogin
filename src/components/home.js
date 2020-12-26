@@ -26,8 +26,8 @@ function Home() {
   return (
     <div>
       <h1>WahniHome</h1>
-      <Loader width="20px" borderWidth="5px" />
-      <button onClick={() => clickHandler()}>fetch</button>
+      {/* <Loader width="20px" borderWidth="5px" />
+      <button onClick={() => clickHandler()}>fetch</button> */}
     </div>
   );
 }

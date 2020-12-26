@@ -29,7 +29,7 @@ export function AdminQuestionContextProvider(props) {
             list.push({ ...doc.data(), id: doc.id });
           })
           setAllQs(list);
-          console.log(list)
+          // console.log(list)
         })
       }, []);
   
