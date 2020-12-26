@@ -2,42 +2,25 @@ import React, { useState, useContext, useEffect } from "react";
 import { UserContext } from "./context/user1Context";
 import Loader from "../globalComponents/loader";
 import axios from "axios";
+import firebase from '../firebase'
 
 function Home() {
-  const user = useContext(UserContext);
+  const userContextObject = useContext(UserContext);
+  const [array1, setarray1] = useState([])
 
-  const apiKey = "ece76e4a5a7f59a";
-  const apiSecret = "099595a2f12ff22";
+  // useEffect(() => {
+  //   firebase.firestore().collection('questions').onSnapshot((thisisquery) => {
+  //     const list = [];
+  //     thisisquery.forEach((doc) => {
+  //       list.push({ ...doc.data(), id: doc.id });
+  //     })
+  //     setarray1(list);
+  //   })
+  // }, []);
 
-  const baseUrl = "https://reachkerala.in";
-  const cors = "https://cors-anywhere.herokuapp.com/";
-
-  useEffect(() => {
-    fetch(`${cors}${baseUrl}/api/method/frappe.auth.get_logged_user`, {
-      headers: {
-        Authorization: `token ${apiKey}:${apiSecret}`,
-        "Access-Control-Allow-Origin": "*",
-      },
-    })
-      .then((r) => r.json())
-      .then((r) => {
-        console.log(r);
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
-  function clickHandler() {
-    fetch(`${cors}${baseUrl}/api/resource/ToDo`, {
-        headers: {
-          Authorization: `token ${apiKey}:${apiSecret}`,
-          "Access-Control-Allow-Origin": "*",
-        },
-      })
-        .then((r) => r.json())
-        .then((r) => {
-          console.log(r);
-        })
-        .catch((err) => console.log(err));
+  async function clickHandler() {
+    console.log('this is score: ',userContextObject.userScores)
+    console.log('this is USER: ',userContextObject.user)
   }
 
   return (

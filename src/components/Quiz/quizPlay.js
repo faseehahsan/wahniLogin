@@ -1,87 +1,98 @@
-import { Redirect, Link } from 'react-router-dom';
-import React, {useState, useContext, useEffect } from 'react';
-import { UserContext } from '../context/user1Context';
-import { QuestionContext } from '../context/questionsContext';
-import './quizScreen.css';
-import QuestionCard from './questionCard'
-import Loader from '../../globalComponents/loader'
+import { Redirect, Link } from "react-router-dom";
+import React, { useState, useContext, useEffect } from "react";
+import { UserContext } from "../context/user1Context";
+import "./quizScreen.css";
+import QuestionCard from "./questionCard";
+import Loader from "../../globalComponents/loader";
+import firebase from "../../firebase";
+import { useHistory } from "react-router-dom";
 
 function Home() {
+  // user details and scores
+  const userContextObject = useContext(UserContext);
+  const user = userContextObject.user;
+  const userScores = userContextObject.userScores;
+  // shuffled questions
+  const [questions, setQuestions] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  // useHistory hook to redirect to '/Quiz' on login if registration is complete
+  const history = useHistory();
 
-    // useContext is used to confirm if a user is loggedIn
-    const user = useContext(UserContext);
-    // questions received from questionContext
-    const [qs, setqs] = useContext(QuestionContext);
-    // shuffled questions
-    const [questions, setQuestions] = useState('');
-    const [isLoading, setIsLoading] = useState(true);
-
-    useEffect(() => {
-        // on component load, from the qs, array the questions are shuffled and randomized
-        setIsLoading(true);
-        // Get sub-array of first n elements after shuffled
-        const shuffled = qs.sort(() => 0.5 - Math.random());
-        let selected = shuffled.slice(0, 5);
-        setQuestions(selected);
+  async function getQuestionsFromFirestore() {
+    await firebase
+      .firestore()
+      .collection("questions")
+      .limit(5)
+      .get()
+      .then((thisisquery) => {
+        const list = [];
+        thisisquery.forEach((doc) => {
+          list.push({ ...doc.data(), id: doc.id });
+        });
+        setQuestions(list);
         setIsLoading(false);
-    }, [])
+      })
+      .catch((err) => {
+        history.push("/Quiz");
+        window.alert("couldnt fetch questions");
+      });
+  }
 
-    // question Index to be shown to the user
-    const [currentQuestion, setCurrentQuestion] = useState(0);
-    // calculate scores=
-    const [score, setScore] = useState(0); 
-    // when timeOut or onSubmit the score is shown (showscore set to true)
-    const [showScore, setShowScore] = useState(false);
-    
-    // fetch score hsitory of user from backend to send both score and percentage increase to backend for rankings
+  useEffect(() => {
+    // on component load, from the qs, array the questions are shuffled and randomized
+    setIsLoading(true);
+    getQuestionsFromFirestore();
+  }, []);
 
-    function nextQ(nextQuestion) { 
-        setCurrentQuestion(nextQuestion);
+  // question Index to be shown to the user
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  // calculate scores=
+  const [score, setScore] = useState(0);
+  // when timeOut or onSubmit the score is shown (showscore set to true)
+  const [showScore, setShowScore] = useState(false);
 
-        // const nextQuestion = currentQuestion + 1;
-        // if (nextQuestion < questions.length) {
-		// }
-    }
-    function prevQ() {
-        if (currentQuestion > 0) {
-            const nextQuestion = currentQuestion - 1;
-        setCurrentQuestion(nextQuestion);
-        }
-    }
+  // fetch score hsitory of user from backend to send both score and percentage increase to backend for rankings
 
-    function submitQ(score) {
-        setScore(score)
-        setShowScore(true);
+  function nextQ(nextQuestion) {
+    setCurrentQuestion(nextQuestion);
 
-        // score with user id is sent to backEnd to store with new Date()
-    }
+    // const nextQuestion = currentQuestion + 1;
+    // if (nextQuestion < questions.length) {
+    // }
+  }
 
-    // if there is no user logged in this is redirected to myAccount for login or register
-    if (!user) return <Redirect to='/myAccount' />
+  function submitQ(score) {
+    setScore(score);
+    setShowScore(true);
 
-    if (user && !isLoading) {
-        return (
-        <div className='body'>
-                    <div className='questionDiv'>
-                        <QuestionCard 
-                            currentQuestion={currentQuestion} 
-                            questions={questions} 
-                            prevQ={prevQ} 
-                            nextQ={nextQ}
-                            submitQ={submitQ}
-                            numberOfQ={questions.length}
-                            showScore={showScore} />
-                    </div>
-            </div>
-        )
-    } else if (user && isLoading) {
-        return (
-            <div className='flexCenter body'>
-                <Loader borderWidth='5px' width='50px'/>
-            </div>
-        )
-    }
-	
+    // score with user id is sent to backEnd to store with new Date()
+  }
+
+  // if there is no user logged in this is redirected to myAccount for login or register
+  if (!user || !user.loggedIn ) return <Redirect to="/myAccount" />;
+
+  if (user && !isLoading) {
+    return (
+      <div className="body">
+        <div className="questionDiv">
+          <QuestionCard
+            currentQuestion={currentQuestion}
+            nextQ={nextQ}
+            submitQ={submitQ}
+            questions={questions}
+            user={user}
+            userScores={userScores}
+          />
+        </div>
+      </div>
+    );
+  } else if (user && isLoading) {
+    return (
+      <div className="flexCenter body">
+        <Loader borderWidth="5px" width="50px" />
+      </div>
+    );
+  }
 }
 
 export default Home;

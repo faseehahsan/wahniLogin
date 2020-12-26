@@ -3,40 +3,81 @@ import { Redirect } from "react-router-dom";
 
 import { UserContext } from "../context/user1Context";
 import { QuestionContext } from "../context/questionsContext";
+import { AdminQuestionContext } from "../context/adminQcontext";
 
 import ShowQ from "./showQuestions";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import firebase from '../../firebase'
 
 import "./questionScreen.css";
 
 function AddDel() {
-  const user = useContext(UserContext);
-  const [qs, setqs] = useContext(QuestionContext);
+// user details and scores
+  const userContextObject = useContext(UserContext);
+  const user = userContextObject.user;
 
-  function handleFormSubmit(values) {
-    const correctAnswer = (val) => {
-      if (values.correct === val) {
-        return true;
-      } else {
-        return false;
+  const [allQs, setAllQs] = useContext(AdminQuestionContext);
+
+
+  function handleFormSubmit1(values) {
+    const correctAnswer = (correctoption) => {
+      if (correctoption === 'A') {
+        return values.optionA
+      }
+      if (correctoption === 'B') {
+        return values.optionB
+      }
+      if (correctoption === 'C') {
+        return values.optionC
+      }
+      if (correctoption === 'D') {
+        return values.optionD
       }
     };
     const newQ = {
       questionText: `${values.questionInput}`,
-      answerOptions: [
-        { answerText: `${values.optionA}`, isCorrect: correctAnswer("A") },
-        { answerText: `${values.optionB}`, isCorrect: correctAnswer("B") },
-        { answerText: `${values.optionC}`, isCorrect: correctAnswer("C") },
-        { answerText: `${values.optionD}`, isCorrect: correctAnswer("D") },
+      options: [
+        `${values.optionA}`,
+        `${values.optionB}`,
+        `${values.optionC}`,
+        `${values.optionD}`
       ],
     };
 
-    const newqsArray = [...qs, newQ];
+    firebase
+    .firestore()
+    .collection('questions')
+    .add({
+      ...newQ,
+      createdAt: new Date()
+    })
+    .then(res => {
+      console.log('question added with id:', res.id);
+      firebase
+      .firestore()
+      .doc(`answers/${res.id}`)
+      .set({
+        'answer': correctAnswer(values.correct),
+        'questionId': res.id,
+        'createdAt': new Date()
+      })
+      .then(res1 => {
+        console.log('answer added')
+      })
+      .catch(err => {
+        window.alert('Unable to add answer')
 
-    console.log(newqsArray);
-    setqs(newqsArray);
-  }
+      })
+    })
+    .catch(err => {
+      window.alert('Unable to add question')
+    });
+
+
+}
+
+    
 
   if (!user) return <Redirect to="/myAccount" />;
 
@@ -47,7 +88,7 @@ function AddDel() {
       <div className='AdminAppContainer'>
 
         <div className='questionsMainDiv'>
-            <ShowQ questions={qs} />
+            <ShowQ allQs={allQs} setAllQs={setAllQs} />
         </div>
 
         <div className="formDiv">
@@ -61,7 +102,7 @@ function AddDel() {
               optionD: "",
               correct: "",
             }}
-            onSubmit={(values) => handleFormSubmit(values)}
+            onSubmit={(values) => handleFormSubmit1(values)}
             validationSchema={Yup.object().shape({
               questionInput: Yup.string().required("*this is a required field"),
               optionA: Yup.string().required("*this is a required field"),

@@ -41,7 +41,6 @@ function Profile(props) {
   function getURL() {
     // get the url of the image uploaded to firebase
     firebase.storage().ref().child("users/" + user.id + '.jpg').getDownloadURL().then(url1 => {
-      console.log(url1);
       setUrl(url1);
       setImageLoading(false);
       firebase.auth().currentUser.updateProfile({
@@ -56,7 +55,7 @@ function Profile(props) {
   //check if user object has a name
   //if NO name, complete registration form is shown else Profile is shown
   
-  if (user.name === null || user.name === '') {
+  if (user && user.name === null || user && user.name === '') {
     return(
       <div className='body'>
       <div className='login-container card1 responsiveWidth profileContainer'>

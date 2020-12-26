@@ -17,7 +17,6 @@ function Login() {
       .get("https://ipapi.co/json/")
       .then((response) => {
         let data = response.data;
-        console.log(`countryName: ${data.country_calling_code}`);
         const countryCode = data.country_calling_code.substring(1);
         setInputNumber(`${countryCode}`);
       })
@@ -27,7 +26,10 @@ function Login() {
   }, []);
 
   // confirm if user is available
-  const user = useContext(UserContext);
+  // user details and scores
+  const userContextObject = useContext(UserContext);
+  const user = userContextObject.user;
+  const userScores = userContextObject.userScores;
   //  input for mobile number
   const [inputNumber, setInputNumber] = useState("");
   // useHistory hook to redirect to '/Quiz' on login if registration is complete
@@ -44,7 +46,6 @@ function Login() {
 
           // reCAPTCHA solved, allow signInWithPhoneNumber.
           setIsLoading(false)
-          console.log('hii')
           onSignInSubmit();
         },
       }
@@ -53,11 +54,9 @@ function Login() {
   };
 
   const onSignInSubmit = (number, name) => {
-    console.log('hsajdhd')
     setIsLoading(true)
     setUpRecaptcha();
     // var phoneNumber = getPhoneNumberFromUserInput();
-    console.log(number);
     var phoneNumber = "+" + number;
     var appVerifier = window.recaptchaVerifier;
     firebase
@@ -96,7 +95,6 @@ function Login() {
       })
       .catch(function (error) {
         // Error; SMS not sent
-        // console.log(error)
         alert(error);
         window.location.reload();
       });
@@ -117,12 +115,16 @@ function Login() {
   function logout() {
   //on log out click inside <Profile />
     firebase.auth().signOut();
-    console.log("loggedout");
   }
 
   // if user is logged in we show PROFILE else we show LOGIN
 
-  if (!user.loggedIn) {
+  if (user && user.loggedIn) {
+    return (
+      <Profile completeProfile={CompleteProfile} user={user} logout={logout} />
+    );
+  } else {
+    
     return (
       <div className="body">
        
@@ -173,10 +175,6 @@ function Login() {
 
         </div>
       </div>
-    );
-  } else {
-    return (
-      <Profile completeProfile={CompleteProfile} user={user} logout={logout} />
     );
   }
 }

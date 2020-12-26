@@ -7,6 +7,7 @@ import Quiz from './components/Quiz/quizScreen'
 import RankingScreen from './components/Ranking/rankingScreen'
 import { UserContextProvider } from './components/context/user1Context';
 import { QuestionContextProvider } from './components/context/questionsContext';
+import { AdminQuestionContextProvider } from './components/context/adminQcontext'
 import AddDel from './components/questionsScreen/addDelQs'
 import './components/styles/globalStyles.css'
 import Footer from './components/footer/footer'
@@ -27,7 +28,11 @@ function App() {
 
           <QuestionContextProvider>
           <Route exact path='/Quiz/play' component={QuizPlay} />
+
+          <AdminQuestionContextProvider>
           <Route exact path='/Quiz/add' component={AddDel} />
+          </AdminQuestionContextProvider>
+          
           </QuestionContextProvider>
 
           <Route exact path='/Quiz/ranking' component={RankingScreen} />
