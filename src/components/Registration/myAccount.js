@@ -29,7 +29,7 @@ function Login() {
   // user details and scores
   const userContextObject = useContext(UserContext);
   const user = userContextObject.user;
-  const userScores = userContextObject.userScores;
+  const userLoading = userContextObject.userLoading;
   //  input for mobile number
   const [inputNumber, setInputNumber] = useState("");
   // useHistory hook to redirect to '/Quiz' on login if registration is complete
@@ -123,7 +123,15 @@ function Login() {
     return (
       <Profile completeProfile={CompleteProfile} user={user} logout={logout} />
     );
-  } else {
+  }
+  else if (userLoading) {
+    return (
+      <div className='body flexCenter'>
+        <Loader width='50px' borderWidth='5px' />
+      </div>
+    )
+  }
+  else {
     
     return (
       <div className="body">

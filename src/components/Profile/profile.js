@@ -1,174 +1,220 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect, useContext } from "react";
+import { UserContext } from "../context/user1Context";
+import WhiteLink from '../../globalComponents/whiteLink';
 import firebase from '../../firebase'
-// import * as firebase from 'firebase';
-
-import { Formik } from "formik";
-import * as Yup from "yup";
-
-import "../questionsScreen/questionScreen.css";
+import Loader from "../../globalComponents/loader";
 
 function Profile(props) {
+  // user details and scores
+  const userContextObject = useContext(UserContext);
+  const user = userContextObject.user;
+  const userScores = userContextObject.userScores;
+  const userDetails = userContextObject.userDetails;
+  const userDetailsLoading = userContextObject.userDetailsLoading;
+  // profileUpdateIsLoading
+  const [profileUpdateIsLoading, setprofileUpdateIsLoading] = useState(false)
+  // inputs
+  const [professionInput, setprofessionInput] = useState('')
+  const [addressInput, setaddressInput] = useState('')
 
   
-  const { user, logout, completeProfile }  = props;
-  const [url, setUrl] = useState();
-  const [imageLoading, setImageLoading] = useState(true);
-
-
+  // complete profile
+const [completeProfileClicked, setcompleteProfileClicked] = useState(false)
   useEffect(() => {
-    setImageLoading(true);
-    // check if user object has a url for profile image
-    if(user.photoURL !== null) {
-    setUrl(user.photoURL)
+    if(user && !userDetailsLoading && (userDetails.address !== undefined)) {
+      setaddressInput(userDetails.address);
+      setprofessionInput(userDetails.profession)
+    }
+  }, [userDetailsLoading]);
+
+  const username = () => {
+    
+    if (user.name === null || user.name === undefined || user.name === '') {
+      return (
+        <p style={{ fontSize: "24px" }}>
+        <b>Guest</b>
+        </p>
+      )
+    }
+    else {
+      return (
+        <p style={{ fontSize: "24px" }}>
+        {user.name}<b>{user.name}</b>
+        </p>
+      )
+    }
+  };
+  const numberOfTries = () => {
+    if(userScores !== null && userScores !== undefined && (userScores.length > 0)) {
+      return  userScores[0].attempt
     } else {
-      setUrl('https://image.flaticon.com/icons/png/512/2922/2922532.png')
-    };
-    setImageLoading(false)
-  }, [])
+      return 0;
+    }
+  };
+  const highScore = () => {
+    if(userDetails !== null) {
+      if ((userDetails.highestScore !== null) || (userDetails.highestScore !== undefined)) {
+        return userDetails.highestScore
+      } else {
+        return 0
+      }
+    } else {
+      return 0;
+    }
+  };
 
-  function profilePicUpdate(file) {
-    // to update the profile picture
-    setImageLoading(true);
-    firebase.storage().ref('users/' + user.id + '.jpg').put(file).then(ell => {
-      // get the url of the image uploaded to firebase
-      getURL()
-    }).catch(err => {
-      alert(err);
-      setImageLoading(false)
-    })
+  function onEditNameClick() {
+    var newName = window.prompt("Enter your new name", user.name);
+    if(newName === null) {
+      return;
+    }
+    else if (newName !== user.name) {
+      setprofileUpdateIsLoading(true)
+      firebase
+          .auth()
+          .currentUser
+          .updateProfile({
+            displayName: newName
+          })
+          .then(res => {
+            window.alert('Your Profile has been Updated')
+            setprofileUpdateIsLoading(false)
+          })
+          .catch(err => {
+            window.alert('Unable to update', err)
+            setprofileUpdateIsLoading(false)
+          });
+        }
+    
   }
 
-  function getURL() {
-    // get the url of the image uploaded to firebase
-    firebase.storage().ref().child("users/" + user.id + '.jpg').getDownloadURL().then(url1 => {
-      setUrl(url1);
-      setImageLoading(false);
-      firebase.auth().currentUser.updateProfile({
-        photoURL: url1
-      });
-    }).catch(err => {
-      alert(err);
-      setImageLoading(false)
-    })
+  function onCompleteProfileClicked() {
+    if(completeProfileClicked) {
+      setcompleteProfileClicked(false)
+    } else {
+      setcompleteProfileClicked(true)
+    }
   }
 
+  const updateORview = () => {
+    if (completeProfileClicked) {
+      return 'View'
+    } else {
+      return 'Update'
+    }
+  }
+
+  function updateProfile() {
+    if(profileUpdateIsLoading) {
+      window.alert('Updation in progress')
+    } else {
+      if (addressInput !== '' && professionInput !== '') {
+        if (addressInput !== userDetails.address || professionInput !== userDetails.profession) {
+          setprofileUpdateIsLoading(true)
+          firebase
+          .firestore()
+          .doc(`users/${user.id}`)
+          .update({
+            'address': addressInput,
+            'profession' : professionInput,
+          })
+          .then(res => {
+            window.alert('Your profile has been Updated');
+            setprofileUpdateIsLoading(false)
+          })
+          .catch(err => {
+            window.alert('Coudnot update your profile', err);
+            setprofileUpdateIsLoading(false)
+          })
+        } else {
+          window.alert('No changes detected')
+        }
+      } else {
+        window.alert('Both fields cannot be empty')
+      }
+    }
+  }
   //check if user object has a name
   //if NO name, complete registration form is shown else Profile is shown
-  
-  if (user && user.name === null || user && user.name === '') {
-    return(
-      <div className='body'>
-      <div className='login-container card1 responsiveWidth profileContainer'>
-        <div className='form'>
-        <div className='profileImageContainer'>
+
+  return (
+    <div className="body fontMontserrat">
+      <div className="cardOne wahniBgColor flexCenter" id="profileHeight">
+        <div className="profileBoxes profileBox1">
+          {username()}
+          <img onClick={() => onEditNameClick()} src='https://www.iconsdb.com/icons/preview/white/edit-xxl.png' alt="" />
+          <p id="phoneNumber">{user.number}</p>
+        </div>
+
         {
-          imageLoading ? <img src='https://media4.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif' alt="" /> : <img src={url} alt="" />
-
-        }
-        
-        <input type='file' title='hello' id='files' onChange={e => profilePicUpdate(e.target.files[0])} />
-        <label for="files" className='labelForFile'>Edit Avatar</label>
-
+          completeProfileClicked ? 
+          
+          <div className='completeProfileInputContain'>
+            <div className="numberInputContainer">
+          <p>Profession <b>or Qualification</b></p>
+          <input
+            className="numberInput fontMontserrat"
+            value={professionInput}
+            onChange={(e) => setprofessionInput(e.target.value)}
+            // type="number"
+            placeholder='e.g. Student / B.Tech'
+            name="mobile"
+            required={true}
+          />
         </div>
-
-        <div className='profileDetailsContainer'>
-        <h2 style={{alignSelf:'center'}}>Complete Your Profile</h2>
-
-        <Formik
-            initialValues={{
-              nameInput: "",
-            }}
-            onSubmit={(values) => completeProfile(values.nameInput)}
-            validationSchema={Yup.object().shape({
-              nameInput: Yup.string().required("*this is a required field"),
-            })}
-          >
-            {(props) => {
-              const {
-                values,
-                touched,
-                errors,
-                dirty,
-                isSubmitting,
-                handleChange,
-                handleBlur,
-                handleSubmit,
-                handleReset,
-              } = props;
-              return (
-                <form onSubmit={handleSubmit}>
-                  <div className='labelClass'>Enter Name</div>
-
-                  <input
-                    id="nameInput"
-                    placeholder="e.g. John"
-                    type="text"
-                    value={values.nameInput}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    className={
-                      errors.nameInput && touched.nameInput
-                        ? "inputStyle error"
-                        : "inputStyle"
-                    }
-                  />
-                  <div style={{marginLeft: '8%'}}>
-                  {errors.nameInput && touched.nameInput && (
-                    <div className="input-feedback">{errors.nameInput}</div>
-                  )}
-                  </div>
-
-                  
-                  <div style={{display:'flex', justifyContent:'center', paddingTop:'20px'}}>
-                  <button type="submit" className='submitButton1'>SAVE PROFILE</button>
-                  </div>
-                </form>
-              );
-            }}
-          </Formik>
-
+        <div style={{marginTop: '8px'}} className="numberInputContainer">
+          <p>Your <b>Address</b></p>
+          <input
+            className="numberInput fontMontserrat"
+            value={addressInput}
+            onChange={(e) => setaddressInput(e.target.value)}
+            // type="number"
+            placeholder='e.g. Kechery, Thrissur - P.O 680519'
+            name="mobile"
+            required={true}
+          />
         </div>
-
-        </div>
-      </div>
-  </div>
-    )
-  } else {
-    return (
-      <div className='body'>
-      <div className='login-container card1 loginresponsive profileContainer'>
-        <div className='form'>
-        <div className='profileImageContainer'>
+        <div onClick={() => updateProfile()} className='updateProfileButton wahniColor'>
         {
-          imageLoading ? <img src='https://media4.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif' alt="" /> : <img src={url} alt="" />
-
+          profileUpdateIsLoading ? 
+          <Loader borderWidth='3px' width='10px'/>
+          :
+          <p><b>Update</b> Profile</p>
         }
-        
-        <input type='file' title='hello' id='files' onChange={e => profilePicUpdate(e.target.files[0])} />
-        <label for="files" className='labelForFile'>Edit Avatar</label>
+        {/* <img onClick={() => onEditNameClick()} src='https://www.iconsdb.com/icons/preview/white/save-as-xxl.png' alt="" /> */}
+        </div>
+          </div>
 
-        </div>
-        <div className='profileDetailsContainer'>
-        <div>
-        <p className='profileText'>Name: {user.name}</p>
-        <p className='profileText'>Phone No.: {user.number}</p>
-        <p className='profileText'>No. of Attempts: </p>
-        <p className='profileText'>Highest Score: </p>
-        <div className='flexCenter'>
-        <div className='button1' type='button' onClick={() => logout()}>LOGOUT</div>
-        </div>
+          :
 
+          <div className="profileBoxes profileBox2">
+          <div className="profileBox2singleRow">
+            <p>
+              Number of <b>Tries</b>
+            </p>
+            <p>
+              <b>{numberOfTries()}</b>
+            </p>
+          </div>
+          <div className="profileBox2singleRow">
+            <p>
+              High<b>score</b>
+            </p>
+            <p>
+              <b>{highScore()}</b>
+            </p>
+          </div>
         </div>
-
-        </div>
-
-        </div>
+        }
       </div>
-  </div>
-    );
-
-  }
-
+      <WhiteLink onClick={() => onCompleteProfileClicked(true)}>
+        <b>{updateORview()}</b> Your Profile
+      </WhiteLink>
+      <WhiteLink>
+        <b>Go to</b> Quiz
+      </WhiteLink>
+    </div>
+  );
 }
 
 export default Profile;

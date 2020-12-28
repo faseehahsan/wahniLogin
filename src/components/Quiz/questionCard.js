@@ -25,7 +25,11 @@ function QuestionCard(props) {
   //check if show score is true
   const [showScore, setShowScore] = useState(false);
   //check if something is loading
+  // check if first firebase operation is loading
+  //basically there are two firebase calls here
   const [isLoading, setIsLoading] = useState(false);
+  // check if second firebase opretion is loading
+  const [isLoading1, setIsLoading1] = useState(false);
   // calculate score 
   const [score, setScore] = useState(0)
 
@@ -115,6 +119,7 @@ function QuestionCard(props) {
       }
     }
     setIsLoading(true);
+    setIsLoading1(true);
     setShowScore(true);
     // send to firestore
     if (user && user.loggedIn) {
@@ -127,54 +132,93 @@ function QuestionCard(props) {
   }
 
   function createScoreObject2submit2firestore(newScore) {
-
+    //if not first time
     if (user && userScores.length > 0) {
       const lastScore = userScores[0].score;
-      const newPercentageIncrease = (newScore-lastScore)/lastScore*100;
-      const newAttempt = userScores[0].attempt + 1;
       
+      const newPercentageIncrease = () => {
+        if(lastScore === 0) {
+          return newScore*100
+        } else {
+          return (newScore-lastScore)/lastScore*100;
+        }
+      } 
+      const newAttempt = userScores[0].attempt + 1;
+      // set scores
       let newScoreObject = {
+        'uid': user.id,
+        'username': user.name,
         'score': newScore,
         'attempt': newAttempt,
-        'perecentageIncrease': newPercentageIncrease,
+        'perecentageIncrease': newPercentageIncrease(),
         'attendedAt': new Date()
       }
-
       submitting2firestore(newScoreObject)
+
+      // update userDetails
+      if (newScore > lastScore) {
+        firebase.firestore()
+        .doc(`users/${user.id}`)
+        .update({
+          'highestScore': newScore,
+          'attempt': newAttempt,
+          'updatedAt': new Date()
+        })
+        .then(res => {
+          setIsLoading1(false)
+          console.log('high score updated')
+        })
+        .catch(err => {
+          window.alert('unable to update your profile:', err)
+          setIsLoading1(false)
+        })
+      } else {
+        setIsLoading1(false)
+      }
     
     }
+    // if first time
     else {
+      // set scores
       let newScoreObject = {
+        'uid': user.id,
+        'username': user.name,
         'score': newScore,
         'attempt': 1,
         'perecentageIncrease': null,
-        'attendedAt': new Date()
+        'attendedAt': new Date(),
+      };
+      submitting2firestore(newScoreObject);
+
+      // also add user details
+      let userDetails2add = {
+        'username': user.name,
+        'uid': user.id,
+        'totalAttempts': 1,
+        'highestScore': newScore,
+        'updatedAt': new Date(),
       }
-      submitting2firestore(newScoreObject)
+      firebase
+      .firestore()
+      .doc(`users/${user.id}`)
+      .set(userDetails2add)
+      .then(res => {
+        setIsLoading1(false)
+        console.log('new user details ADDED')
+      })
+      .catch(err => {
+        window.alert('Unable to update your Profile :', err)
+        setIsLoading1(false)
+      })
     }
 
   }
 
   function submitting2firestore(newScoreObject) {
     firebase
-    .firestore()
-    .collection(`users/${user.id}/scores`)
-    .add(
-      newScoreObject
-    )
-    .then(res => {
-      console.log('added to database')
-
-      firebase
       .firestore()
       .collection('rankings')
-      .add(
-        {
-          ...newScoreObject,
-          'uid': user.id,
-          'username': user.name,
-        }
-      )
+      .add(newScoreObject)
       .then(res => {
         
         console.log('added to rankings')
@@ -187,14 +231,6 @@ function QuestionCard(props) {
         window.alert('Error updating the rankings')
         setIsLoading(false)
       })
-
-    })
-    .catch(err => {
-      console.log('error')
-
-      setIsLoading(false)
-      window.alert('Error updating your profile')
-    });
   }
 
 
@@ -241,7 +277,7 @@ function QuestionCard(props) {
   if ((timeOver && showScore) || showScore || (quizOver && showScore)) {
     return (
       <div className="flexContainFull flexCenter">
-        {isLoading ? 
+        {(isLoading || isLoading1) ? 
 
         <Loader width='50px' borderWidth='6px' />
 

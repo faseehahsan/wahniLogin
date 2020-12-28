@@ -6,7 +6,7 @@ import firebase from '../firebase'
 
 function Home() {
   const userContextObject = useContext(UserContext);
-  const [array1, setarray1] = useState([])
+  // const [array1, setarray1] = useState([])
 
   // useEffect(() => {
   //   firebase.firestore().collection('questions').onSnapshot((thisisquery) => {
@@ -18,16 +18,17 @@ function Home() {
   //   })
   // }, []);
 
-  async function clickHandler() {
+  function clickHandler() {
     console.log('this is score: ',userContextObject.userScores)
     console.log('this is USER: ',userContextObject.user)
+    console.log('this is USER details: ',userContextObject.userDetails)
+    window.prompt('Enter')
   }
 
   return (
     <div>
       <h1>WahniHome</h1>
-      {/* <Loader width="20px" borderWidth="5px" />
-      <button onClick={() => clickHandler()}>fetch</button> */}
+      <button onClick={() => clickHandler()}>fetch</button>
     </div>
   );
 }

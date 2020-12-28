@@ -1,0 +1,53 @@
+.linkContainer {
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    max-width: 500px;
+    
+}
+.linkContainer :hover {
+    background-color: black;
+}
+.linkContain {
+    width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 15px;
+  transition: 1s;
+  box-shadow: 1px 1px 5px 2px #00000036;
+  /* margin: 10px; */
+  margin: 15px 0px 0px 0px;
+  
+  height: 60px;
+  cursor: pointer;
+  font-size: 18px;
+  /* border: 2px solid grey; */
+
+
+    /* cursor: progress; */
+    /* cursor:initial; */
+}
+
+.linkContain :hover {
+    background-color: transparent;
+    border: none;
+}
+
+/* .linkContain :hover{
+    background-color: #437937;
+    color: #ffffff;
+  } */
+  
+  .whiteLink2 {
+    display: flex;
+    height: 60px;
+    align-items: center;
+  }
+  
+  .linkContain p {
+    margin: 0;
+    padding: 0;
+    font-size: 18px;
+    letter-spacing: 0.05em;
+  }

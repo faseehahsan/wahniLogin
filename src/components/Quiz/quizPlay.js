@@ -12,6 +12,8 @@ function Home() {
   const userContextObject = useContext(UserContext);
   const user = userContextObject.user;
   const userScores = userContextObject.userScores;
+  const userScoresLoading = userContextObject.userScoresLoading;
+  const userDetailsLoading = userContextObject.userDetailsLoading
   // shuffled questions
   const [questions, setQuestions] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -71,7 +73,7 @@ function Home() {
   // if there is no user logged in this is redirected to myAccount for login or register
   if (!user || !user.loggedIn ) return <Redirect to="/myAccount" />;
 
-  if (user && !isLoading) {
+  if (user && !isLoading && !userScoresLoading && !userDetailsLoading) {
     return (
       <div className="body">
         <div className="questionDiv">
@@ -86,7 +88,7 @@ function Home() {
         </div>
       </div>
     );
-  } else if (user && isLoading) {
+  } else if ((user && isLoading) || (user && userScoresLoading) || (user && userDetailsLoading)) {
     return (
       <div className="flexCenter body">
         <Loader borderWidth="5px" width="50px" />
