@@ -22,13 +22,13 @@ function Home() {
     console.log('this is score: ',userContextObject.userScores)
     console.log('this is USER: ',userContextObject.user)
     console.log('this is USER details: ',userContextObject.userDetails)
-    window.prompt('Enter')
   }
 
   return (
     <div>
       <h1>WahniHome</h1>
       <button onClick={() => clickHandler()}>fetch</button>
+      {/* <QuestionCardGlobal /> */}
     </div>
   );
 }

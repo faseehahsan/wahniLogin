@@ -21,9 +21,11 @@ function Profile(props) {
   // complete profile
 const [completeProfileClicked, setcompleteProfileClicked] = useState(false)
   useEffect(() => {
-    if(user && !userDetailsLoading && (userDetails.address !== undefined)) {
-      setaddressInput(userDetails.address);
+    if(user && !userDetailsLoading && (userDetails !== undefined)) {
+      if ((userDetails.address !== null) && (userDetails.address !== undefined)) {
+        setaddressInput(userDetails.address);
       setprofessionInput(userDetails.profession)
+      }
     }
   }, [userDetailsLoading]);
 
@@ -52,7 +54,7 @@ const [completeProfileClicked, setcompleteProfileClicked] = useState(false)
     }
   };
   const highScore = () => {
-    if(userDetails !== null) {
+    if(userDetails !== null && userDetails !== undefined) {
       if ((userDetails.highestScore !== null) || (userDetails.highestScore !== undefined)) {
         return userDetails.highestScore
       } else {
@@ -87,6 +89,11 @@ const [completeProfileClicked, setcompleteProfileClicked] = useState(false)
         }
     
   }
+
+  function logout() {
+    //on log out click inside <Profile />
+      firebase.auth().signOut();
+    }
 
   function onCompleteProfileClicked() {
     if(completeProfileClicked) {
@@ -140,11 +147,22 @@ const [completeProfileClicked, setcompleteProfileClicked] = useState(false)
   return (
     <div className="body fontMontserrat">
       <div className="cardOne wahniBgColor flexCenter" id="profileHeight">
-        <div className="profileBoxes profileBox1">
+        {
+          completeProfileClicked ? 
+          null
+          :
+          <div className="profileBoxes profileBox1">
+          <div>
           {username()}
-          <img onClick={() => onEditNameClick()} src='https://www.iconsdb.com/icons/preview/white/edit-xxl.png' alt="" />
+          </div>
+          <div className='editButtonContainer'>
+          <img onClick={() => onEditNameClick()} src='https://www.iconsdb.com/icons/preview/white/edit-xxl.png' alt="Edit Name" />
+          </div>
+          <div>
           <p id="phoneNumber">{user.number}</p>
+          </div>
         </div>
+        }
 
         {
           completeProfileClicked ? 
@@ -206,6 +224,7 @@ const [completeProfileClicked, setcompleteProfileClicked] = useState(false)
           </div>
         </div>
         }
+        <img className='logOutIcon' onClick={() => logout()} src='https://www.iconsdb.com/icons/preview/white/logout-xxl.png' alt="Logout" />
       </div>
       <WhiteLink onClick={() => onCompleteProfileClicked(true)}>
         <b>{updateORview()}</b> Your Profile

@@ -179,10 +179,18 @@ function QuestionCard(props) {
     }
     // if first time
     else {
+      const username = () => {
+        if (user.name === null || user.name === undefined || user.name === '') {
+          return user.name
+        }
+        else {
+          return 'Guest'
+        }
+      };
       // set scores
       let newScoreObject = {
         'uid': user.id,
-        'username': user.name,
+        'username': username(),
         'score': newScore,
         'attempt': 1,
         'perecentageIncrease': null,

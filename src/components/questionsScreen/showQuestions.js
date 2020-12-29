@@ -1,33 +1,35 @@
 import React, {useState, useContext, useEffect } from 'react';
 import './questionScreen.css'
 import firebase from '../../firebase'
+import QuestionCardGlobal from '../../globalComponents/questionCardGlobal';
+import Loader from '../../globalComponents/loader';
 
 function ShowQ(props) {
+
     const { allQs, setAllQs } = props;
-    const [correctAnswers, setCorrectAnswers] = useState([
-      {
-        'id': '123',
-        'answer': 'sdasda'       
-      }, 
-      {
-        'id': '456',
-        'answer': 'second'
-      },
-      {
-        'id': '789',
-        'answer': 'third'
-      },
-    ]);
+    const [correctAnswers, setCorrectAnswers] = useState([]);
     // const [newQs, setnewQs] = useState(AllQs)
+    const [answerIsLoading, setanswerIsLoading] = useState(false)
     
 
+
     function getAnswer(id ,index) {
-      firebase
+      setanswerIsLoading(true)
+      if(correctAnswers[index]) {
+        console.log('not fetching');
+        setanswerIsLoading(false)
+      } else {
+        firebase
       .firestore()
       .doc(`answers/${id}`)
       .get().then((docData => {
         const answersingle = docData.data().answer;
-        setAllQs(prevCorrectAnswer => [...prevCorrectAnswer.slice(0,index), {...prevCorrectAnswer[index], 'answer': answersingle}, ...prevCorrectAnswer.slice(index+1,3)]);
+        const list = correctAnswers;
+        list[index] = answersingle;
+        // list[index] = answersingle;
+        setCorrectAnswers(list);
+        console.log(list)
+        setanswerIsLoading(false)
 
 
         // const list = [];
@@ -39,7 +41,9 @@ function ShowQ(props) {
       }))
       .catch(err => {
         window.alert('Unable to get Answer')
+        setanswerIsLoading(false)
       });
+      }
     }
 
     
@@ -78,18 +82,84 @@ function ShowQ(props) {
         );
 }
 
+const idNameBasedOnAnswer = (option, answer) => {
+  if (option === answer) {
+      return 'answerButton2'
+  } else {
+      return 'answerButton1'
+  }
+}
+
     function QuestionsView() {
         return (
           <div className='questonsSubMainDiv'>
             {allQs ? (
               allQs.map((q, i) => (
-                <div className='insideQuestionsView'>
-                  {/* <p>Question:</p> */}
-                    <p style={{fontWeight: 'bold'}}>Q : {q.questionText}</p>
-                    <AnswersView answers={q.options} />
-                    The Answer is {q.answer}
-                    <button onClick={() => getAnswer(q.id, i)}>show answer</button>
+                // <div className='insideQuestionsView'>
+                //   {/* <p>Question:</p> */}
+                //     <p style={{fontWeight: 'bold'}}>Q : {q.questionText}</p>
+                //     <AnswersView answers={q.options} />
+                //     The Answer is {q.answer}
+                //     <button onClick={() => getAnswer(q.id, i)}>show answer</button>
+                // </div>
+                // <QuestionCardGlobal clickToSeeAnswer={getAnswer} question={q} answer={q.answer} index={i} />
+                <div className='questionDiv1'>
+                <div className="flexContainFull fontMontserrat">
+        <div>
+
+          <div className="questionHeadText1">Question</div>
+        </div>
+
+        <div className="question-and-answer-section1">
+          <div className="question-text1">
+            {q.questionText}
+          </div>
+
+          <div className="answer-section1 wahniColor">
+            {q.options.map((option) => (
+              <div
+                className="buttonOne"
+                id={idNameBasedOnAnswer(option, q.answer)}
+              >
+                {option}
+              </div>
+            ))}
+            {
+              answerIsLoading ? 
+              <div
+                  className="buttonOne flexCenter"
+                  id='loadingButton1'
+                >
+                  <Loader width='15px' borderWidth='5px'/>
                 </div>
+              :
+              <div>
+              {
+                correctAnswers[i] ? 
+                <div
+                  className="buttonOne showAnswerButton"
+                  id='answerButton1'
+                >
+                  Answer is {correctAnswers[i]}
+                </div>
+                :
+                <div
+                  className="buttonOne showAnswerButton"
+                  id='answerButton1'
+                  onClick={() => getAnswer(q.id, i)}
+                >
+                  Click to See Answer {correctAnswers[i]}
+                </div>
+              }
+              </div>
+            }
+              
+          </div>
+          
+        </div>
+
+      </div>
+            </div>
               ))
             ) : (
               <div></div>
