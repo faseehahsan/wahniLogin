@@ -20,6 +20,14 @@
     margin-bottom: 20px;
     font-weight: bold;
     color: white;
+    display: flex;
+    width: 80%;
+    justify-content: space-between;
+  }
+
+  .questionHeadText1 img {
+    width: 20px;
+    height: 20px;
   }
 
   .question-and-answer-section1 {

@@ -35,21 +35,43 @@ function AddDel() {
         return values.optionD
       }
     };
-    const newQ = {
-      questionText: `${values.questionInput}`,
-      options: [
-        `${values.optionA}`,
-        `${values.optionB}`,
-        `${values.optionC}`,
-        `${values.optionD}`
-      ],
-    };
+    
+    if (allQs.length > 0) {
+      console.log(`new index added ${allQs[0].index + 1}`)
+      const newQ = {
+        questionText: `${values.questionInput}`,
+        options: [
+          `${values.optionA}`,
+          `${values.optionB}`,
+          `${values.optionC}`,
+          `${values.optionD}`
+        ],
+        index: allQs[0].index + 1
+      };
+  
+      addNewQ(newQ, correctAnswer(values.correct))
+    } else {
+      const newQ = {
+        questionText: `${values.questionInput}`,
+        options: [
+          `${values.optionA}`,
+          `${values.optionB}`,
+          `${values.optionC}`,
+          `${values.optionD}`
+        ],
+        index: 1
+      };
+  
+      addNewQ(newQ, correctAnswer(values.correct))
+    }
+}
 
-    firebase
+function addNewQ(newQobject, answer) {
+  firebase
     .firestore()
     .collection('questions')
     .add({
-      ...newQ,
+      ...newQobject,
       createdAt: new Date()
     })
     .then(res => {
@@ -58,7 +80,7 @@ function AddDel() {
       .firestore()
       .doc(`answers/${res.id}`)
       .set({
-        'answer': correctAnswer(values.correct),
+        'answer': answer,
         'questionId': res.id,
         'createdAt': new Date()
       })
@@ -73,8 +95,6 @@ function AddDel() {
     .catch(err => {
       window.alert('Unable to add question')
     });
-
-
 }
 
     

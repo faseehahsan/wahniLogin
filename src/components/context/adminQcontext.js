@@ -23,7 +23,11 @@ export function AdminQuestionContextProvider(props) {
     const [allQs, setAllQs] = useState([])
 
     useEffect(() => {
-        firebase.firestore().collection('questions').onSnapshot((thisisquery) => {
+        firebase.firestore()
+        .collection('questions')
+        .orderBy('createdAt', 'desc')
+        .limit(5)
+        .onSnapshot((thisisquery) => {
           const list = [];
           thisisquery.forEach((doc) => {
             list.push({ ...doc.data(), id: doc.id });

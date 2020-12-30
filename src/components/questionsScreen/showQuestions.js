@@ -11,8 +11,6 @@ function ShowQ(props) {
     // const [newQs, setnewQs] = useState(AllQs)
     const [answerIsLoading, setanswerIsLoading] = useState(false)
     
-
-
     function getAnswer(id ,index) {
       setanswerIsLoading(true)
       if(correctAnswers[index]) {
@@ -46,8 +44,24 @@ function ShowQ(props) {
       }
     }
 
+    function deleteQuestion(id) {
+      firebase
+      .firestore()
+      .doc(`questions/${id}`)
+      .delete()
+      .then(res => console.log('question deleted'))
+      .catch(err => console.log(err));
+      firebase
+      .firestore()
+      .doc(`answers/${id}`)
+      .delete()
+      .then(res => console.log('answer deleted'))
+      .catch(err => console.log(err));
+      setCorrectAnswers([])
+    }
+
     
-    const colorConst = (iscorrect) => {
+  const colorConst = (iscorrect) => {
       if(iscorrect) {
           return 'green'
       } else {
@@ -62,25 +76,6 @@ function ShowQ(props) {
     }
 }
 
-    function AnswersView(props) {
-        const {answers} = props
-        return (
-          <div>
-            
-            {answers ? (
-              answers.map((a, i) => (
-                  
-                <span>
-                  
-                    <p>{a}</p>
-                </span>
-              ))
-            ) : (
-              <div></div>
-            )}
-          </div>
-        );
-}
 
 const idNameBasedOnAnswer = (option, answer) => {
   if (option === answer) {
@@ -107,7 +102,9 @@ const idNameBasedOnAnswer = (option, answer) => {
                 <div className="flexContainFull fontMontserrat">
         <div>
 
-          <div className="questionHeadText1">Question</div>
+          <div className="questionHeadText1">Question
+          <img onClick={() => deleteQuestion(q.id)} src='https://www.iconsdb.com/icons/preview/white/delete-xxl.png' />
+          </div>
         </div>
 
         <div className="question-and-answer-section1">
@@ -119,7 +116,7 @@ const idNameBasedOnAnswer = (option, answer) => {
             {q.options.map((option) => (
               <div
                 className="buttonOne"
-                id={idNameBasedOnAnswer(option, q.answer)}
+                id={idNameBasedOnAnswer(option, correctAnswers[i])}
               >
                 {option}
               </div>
