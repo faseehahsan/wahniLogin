@@ -249,7 +249,7 @@ input[type=number] {
     width: 100%;
     flex-direction: column;
     /* height: min-content; */
-    height: 200px;
+    height: 300px;
     align-items: center;
     justify-content: space-between;
 }
@@ -273,6 +273,10 @@ input[type=number] {
     /* display: flex; */
 
 
+}
+
+.numberInputSubContainer {
+    display: flex;
 }
 
 .numberInputContainer p{
@@ -326,6 +330,21 @@ input[type=number] {
     font-weight: bold;
 }
 
+.getOTPbutton {
+    /* letter-spacing: 0.1em; */
+    /* height: 33px; */
+    width: 25%;
+    /* max-width: 300px; */
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.5s;
+    border-radius: 8px;
+    font-weight: bold;
+    padding: 0px 5px;
+    margin: 0 0 0 3px;
+}
+
 /* // profile js */
 
 #profileHeight {
@@ -347,8 +366,8 @@ input[type=number] {
 
 
 .editButtonContainer img{
-    width: 13px;
-    height: 13px;
+    width: 20px;
+    height: 20px;
     align-self:flex-start;
     justify-content: flex-start;
     align-content: flex-start;
@@ -440,6 +459,11 @@ img:hover {
     /* padding-bottom: 20px; */
     /* display: none; */
 
+}
+
+.linkToQuiz {
+    display: flex;
+    align-items: center;
 }
 
 @media only screen and (max-width: 400px) {

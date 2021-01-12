@@ -10,7 +10,8 @@ import "./myAccount.css";
 
 function Login() {
 
-  const [isloading, setIsLoading] = useState(false)
+  const [isloading1, setIsLoading1] = useState(false)
+  const [isloading2, setIsLoading2] = useState(false)
   // on Component load fetch the country code based on the ip address and set input field
   useEffect(() => {
     axios
@@ -21,7 +22,7 @@ function Login() {
         setInputNumber(`${countryCode}`);
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
   }, []);
 
@@ -32,6 +33,8 @@ function Login() {
   const userLoading = userContextObject.userLoading;
   //  input for mobile number
   const [inputNumber, setInputNumber] = useState("");
+  const [otpInput, setOtpInput] = useState('')
+  const [verificationId1, setVerificationId1] = useState('');
   // useHistory hook to redirect to '/Quiz' on login if registration is complete
   const history = useHistory();
 
@@ -41,11 +44,11 @@ function Login() {
     window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
       "recaptcha-container",
       {
-        size: "normal",
+        size: "small",
         callback: function (response) {
 
           // reCAPTCHA solved, allow signInWithPhoneNumber.
-          setIsLoading(false)
+          setIsLoading1(false)
           onSignInSubmit();
         },
       }
@@ -54,8 +57,10 @@ function Login() {
   };
 
   const onSignInSubmit = (number, name) => {
-    setIsLoading(true)
+    
+    setIsLoading1(true)
     setUpRecaptcha();
+    alert('Please fill captcha below to get OTP')
     // var phoneNumber = getPhoneNumberFromUserInput();
     var phoneNumber = "+" + number;
     var appVerifier = window.recaptchaVerifier;
@@ -65,33 +70,18 @@ function Login() {
       .then(function (confirmationResult) {
         // SMS sent. Prompt user to type the code from the message, then sign the
         // user in with confirmationResult.confirm(code).
-        console.log("get OTP initiated");
+        // console.log("get OTP initiated");
 
         // afterGETotp(confirmationResult)
 
-        window.confirmationResult = confirmationResult;
+        // run OTP confirmation
+
+        // window.confirmationResult = confirmationResult;
+
         // step4
-        var code = window.prompt("Password has been sent to your device");
-        // var code = getCodeFromUserInput();
-        confirmationResult
-          .confirm(code)
-          .then(function (result) {
-            // User signed in successfully.
-
-            var user1 = firebase.auth().currentUser;
-            if (user1.displayName !== null || user1.displayName === "") {
-              history.push("/Quiz");
-            }
-
-            setInputNumber("");
-            // ...
-          })
-          .catch(function (error) {
-            // User couldn't sign in (bad verification code?)
-            // ...
-            alert(error);
-            window.location.reload();
-          });
+        setVerificationId1(confirmationResult.verificationId)
+        // console.log('verificationId set')
+        alert('OTP has been sent to your number')
       })
       .catch(function (error) {
         // Error; SMS not sent
@@ -100,6 +90,33 @@ function Login() {
       });
   };
   //Registration, Verifying Captcha and OTP validation END
+
+  function otpConfirmation() {
+    if(verificationId1 !== '' && otpInput !== '') {
+      setIsLoading2(true)
+    var credential = firebase.auth.PhoneAuthProvider.credential(verificationId1, otpInput);
+        firebase.auth().signInWithCredential(credential).then((res) => {
+          // console.log('signedIn')
+              var user1 = firebase.auth().currentUser;
+            if (user1.displayName !== null || user1.displayName === "") {
+              history.push("/Quiz");
+            } else {
+              window.location.reload();
+            }
+            setIsLoading2(false)
+
+  }).catch(err => {
+    alert('Error Verifying OTP')
+    window.location.reload();
+    setIsLoading2(false)
+  })
+    } else if(otpInput === '' && verificationId1 !== '') {
+      alert('Solve reCaptcha to initialize verification')
+    } else {
+      alert('Get OTP to initialize verification')
+    }
+}
+
 
   function CompleteProfile(nameInput) {
       //on submitting FORM in complete registration form in <Profile />
@@ -143,6 +160,7 @@ function Login() {
           <p className="headerLogin fontMontserrat">L O G I N</p>
             <div className="numberInputContainer">
               <p>enter <b>mobile number</b></p>
+              <div className='numberInputSubContainer'>
               <input
                 className="numberInput fontMontserrat"
                 value={inputNumber}
@@ -152,15 +170,58 @@ function Login() {
                 name="mobile"
                 required={true}
               />
+              {!isloading1 ? 
+              <div
+              className="getOTPbutton wahniBgColor flexCenter"
+              type="button"
+              onClick={() => onSignInSubmit(inputNumber)}
+            >
+              Get OTP
+            </div>
+            : 
+            <div
+              className="getOTPbutton wahniBgColor flexCenter"
+              type="button"
+              onClick={() => {
+                if(verificationId1 === '') {
+                  if (window.confirm('Solve reCaptcha to receive OTP. Verification in progress. Click OK to abort the process.')) window.location.reload();
+                } else {
+                  if (window.confirm('Verification in progress. Click OK to abort the process.')) window.location.reload();
+                }
+              }
+            }
+              >
+              <Loader width='15px' borderWidth='3px' />
+            </div>
+            }
+
+              </div>
+              
+            </div>
+
+            <div className="numberInputContainer">
+              <p>enter <b>OTP</b></p>
+              <div className='numberInputSubContainer'>
+              <input
+                className="numberInput fontMontserrat"
+                value={otpInput}
+                onChange={(e) => setOtpInput(e.target.value)}
+                type="number"
+                placeholder='Enter your OTP'
+                name="mobile"
+                required={true}
+              />
+
+              </div>
+              
             </div>
 
 
-
-            {!isloading ? 
+            {!isloading2 ? 
               <div
               className="signInButton wahniBgColor flexCenter"
               type="button"
-              onClick={() => onSignInSubmit(inputNumber)}
+              onClick={() => otpConfirmation()}
             >
               SIGN IN
             </div>
@@ -168,7 +229,7 @@ function Login() {
             <div
               className="signInButton wahniBgColor flexCenter"
               type="button"
-              onClick={() => { if (window.confirm('Verification in progress. Are you sure you want to cancel ?')) window.location.reload();} }
+              onClick={() => { if (window.confirm('Verification in progress. Click OK to abort the process.')) window.location.reload();} }
               >
               <Loader width='15px' borderWidth='3px' />
             </div>

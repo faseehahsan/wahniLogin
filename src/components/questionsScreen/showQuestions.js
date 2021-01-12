@@ -1,8 +1,10 @@
-import React, {useState, useContext, useEffect } from 'react';
-import './questionScreen.css'
-import firebase from '../../firebase'
-import QuestionCardGlobal from '../../globalComponents/questionCardGlobal';
+import React, { useState } from 'react';
+import firebase from '../../firebase';
 import Loader from '../../globalComponents/loader';
+import './questionScreen.css';
+import '../../globalComponents/questionCardGlobal.css';
+import deleteIcon from '../../assets/delete-white-icon.png';
+
 
 function ShowQ(props) {
 
@@ -10,11 +12,11 @@ function ShowQ(props) {
     const [correctAnswers, setCorrectAnswers] = useState([]);
     // const [newQs, setnewQs] = useState(AllQs)
     const [answerIsLoading, setanswerIsLoading] = useState(false)
+
     
     function getAnswer(id ,index) {
       setanswerIsLoading(true)
       if(correctAnswers[index]) {
-        console.log('not fetching');
         setanswerIsLoading(false)
       } else {
         firebase
@@ -26,7 +28,6 @@ function ShowQ(props) {
         list[index] = answersingle;
         // list[index] = answersingle;
         setCorrectAnswers(list);
-        console.log(list)
         setanswerIsLoading(false)
 
 
@@ -49,14 +50,14 @@ function ShowQ(props) {
       .firestore()
       .doc(`questions/${id}`)
       .delete()
-      .then(res => console.log('question deleted'))
-      .catch(err => console.log(err));
+      .then(res => alert('Question has been deleted'))
+      .catch(err => alert('Unable to delete question', err));
       firebase
       .firestore()
       .doc(`answers/${id}`)
       .delete()
       .then(res => console.log('answer deleted'))
-      .catch(err => console.log(err));
+      .catch(err => alert('Unable to delete answer', err));
       setCorrectAnswers([])
     }
 
@@ -103,7 +104,7 @@ const idNameBasedOnAnswer = (option, answer) => {
         <div>
 
           <div className="questionHeadText1">Question
-          <img onClick={() => deleteQuestion(q.id)} src='https://www.iconsdb.com/icons/preview/white/delete-xxl.png' />
+          <img onClick={() => deleteQuestion(q.id)} src={deleteIcon} />
           </div>
         </div>
 

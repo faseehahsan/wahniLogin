@@ -22,8 +22,8 @@ function App() {
       <Navbar />
       <Switch>
       <UserContextProvider>
-        <Route exact path='/' component={Home} />
-          <Route exact path='/myAccount' component={MyAccount} />
+        {/* <Route exact path='/' component={Home} /> */}
+          <Route exact path='/' component={MyAccount} />
           <Route exact path='/Quiz' component={Quiz} />
 
           <QuestionContextProvider>

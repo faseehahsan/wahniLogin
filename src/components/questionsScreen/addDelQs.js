@@ -37,7 +37,6 @@ function AddDel() {
     };
     
     if (allQs.length > 0) {
-      console.log(`new index added ${allQs[0].index + 1}`)
       const newQ = {
         questionText: `${values.questionInput}`,
         options: [
@@ -75,7 +74,6 @@ function addNewQ(newQobject, answer) {
       createdAt: new Date()
     })
     .then(res => {
-      console.log('question added with id:', res.id);
       firebase
       .firestore()
       .doc(`answers/${res.id}`)
@@ -85,7 +83,8 @@ function addNewQ(newQobject, answer) {
         'createdAt': new Date()
       })
       .then(res1 => {
-        console.log('answer added')
+        alert('Question added successfully')
+        
       })
       .catch(err => {
         window.alert('Unable to add answer')
@@ -99,19 +98,16 @@ function addNewQ(newQobject, answer) {
 
     
 
-  if (!user) return <Redirect to="/myAccount" />;
+  if (!user) return <Redirect to="/" />;
+  if (user && user.id !== 'GmGq1t1xkobQLpfQEjv7QQogH022') return <Redirect to="/" />
 
-  if (user.id !== "zOOj1gwSb7WQA7dwMBgW2EYJOk52") {
+  if (user.id !== "GmGq1t1xkobQLpfQEjv7QQogH022") {
     return <h1>You are not AUTHORIZED</h1>;
   } else {
     return (
       <div className='AdminAppContainer'>
-
-        <div className='questionsMainDiv'>
-            <ShowQ allQs={allQs} setAllQs={setAllQs} />
-        </div>
-
-        <div className="formDiv">
+        <div className='flexCenter'>
+        <div className="formDiv wahniBgColor">
         <p className='formHeader'>ADD QUESTIONS</p>
           <Formik
             initialValues={{
@@ -122,7 +118,10 @@ function addNewQ(newQobject, answer) {
               optionD: "",
               correct: "",
             }}
-            onSubmit={(values) => handleFormSubmit1(values)}
+            onSubmit={(values, {resetForm}) => {
+              handleFormSubmit1(values)
+              resetForm({values: ''})
+            }}
             validationSchema={Yup.object().shape({
               questionInput: Yup.string().required("*this is a required field"),
               optionA: Yup.string().required("*this is a required field"),
@@ -146,7 +145,6 @@ function addNewQ(newQobject, answer) {
               } = props;
               return (
                 <form onSubmit={handleSubmit}>
-                  
                   <input
                     id="questionInput"
                     placeholder="Enter the Question"
@@ -154,11 +152,13 @@ function addNewQ(newQobject, answer) {
                     value={values.questionInput}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    className={
-                      errors.questionInput && touched.questionInput
-                        ? "text-input error"
-                        : "text-input"
-                    }
+                    // className={
+                    //   errors.questionInput && touched.questionInput
+                    //     ? "text-input error"
+                    //     : "text-input"
+                    // }
+                    className='numberInput fontMontserrat'
+
                   />
                   {errors.questionInput && touched.questionInput && (
                     <div className="input-feedback">{errors.questionInput}</div>
@@ -168,6 +168,8 @@ function addNewQ(newQobject, answer) {
                     Option A
                   </label>
                   <input
+                                      className='numberInput fontMontserrat'
+
                     id="optionA"
                     placeholder="Enter option"
                     type="text"
@@ -187,6 +189,7 @@ function addNewQ(newQobject, answer) {
                     Option B
                   </label>
                   <input
+                    className='numberInput fontMontserrat'
                     id="optionB"
                     placeholder="Enter Option"
                     type="text"
@@ -206,6 +209,8 @@ function addNewQ(newQobject, answer) {
                     Option C
                   </label>
                   <input
+                                      className='numberInput fontMontserrat'
+
                     id="optionC"
                     placeholder="Enter option"
                     type="text"
@@ -225,6 +230,8 @@ function addNewQ(newQobject, answer) {
                     Option D
                   </label>
                   <input
+                                      className='numberInput fontMontserrat'
+
                     id="optionD"
                     placeholder="Enter Option"
                     type="text"
@@ -241,6 +248,7 @@ function addNewQ(newQobject, answer) {
                     <div className="input-feedback">{errors.optionD}</div>
                   )}
 
+                  <div className='flexCenter sellectOptionNbutton'>
                   <select
                     name="correct"
                     value={values.correct}
@@ -261,11 +269,16 @@ function addNewQ(newQobject, answer) {
 
                   <button type="submit" className='submitButton1'>Submit</button>
 
+                  </div>
                   {/* <DisplayFormikState {...props} /> */}
                 </form>
               );
             }}
           </Formik>
+        </div>
+        </div>
+        <div className='questionsMainDiv'>
+            <ShowQ allQs={allQs} setAllQs={setAllQs} />
         </div>
       </div>
     );

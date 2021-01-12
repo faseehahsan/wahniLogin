@@ -4,6 +4,10 @@ import WhiteLink from '../../globalComponents/whiteLink';
 import firebase from '../../firebase'
 import Loader from "../../globalComponents/loader";
 
+import editIcon from '../../assets/edit-white-icon.png';
+import logoutIcon from '../../assets/logout-white-icon.png'
+import { Link } from "react-router-dom";
+
 function Profile(props) {
   // user details and scores
   const userContextObject = useContext(UserContext);
@@ -32,6 +36,7 @@ const [completeProfileClicked, setcompleteProfileClicked] = useState(false)
   const username = () => {
     
     if (user.name === null || user.name === undefined || user.name === '') {
+      
       return (
         <p style={{ fontSize: "24px" }}>
         <b>Guest</b>
@@ -39,9 +44,32 @@ const [completeProfileClicked, setcompleteProfileClicked] = useState(false)
       )
     }
     else {
+      const usernameLength=user.name.length;
+      const userNameAt12 = () => {
+        if (usernameLength > 12) {
+          return user.name.substring(0, 12) + '.'
+        } else {
+          return user.name
+        }
+      }
+      const splitUsername = userNameAt12().split(' ');
+
+      const firstName = splitUsername[0];
+      const secondName = () => {
+        if ((firstName.length < 12) && splitUsername[1]) {
+          if (splitUsername[1].length > (12- firstName.length)) {
+            return splitUsername[1].substring(0,12-firstName.length) + '.'
+          } else {
+            return splitUsername[1].substring(0,12-firstName.length)
+          }
+        } else {
+          return ''
+        }
+      }
+      
       return (
         <p style={{ fontSize: "24px" }}>
-        {user.name}<b>{user.name}</b>
+        {firstName}<b> {secondName()}</b>
         </p>
       )
     }
@@ -81,6 +109,8 @@ const [completeProfileClicked, setcompleteProfileClicked] = useState(false)
           .then(res => {
             window.alert('Your Profile has been Updated')
             setprofileUpdateIsLoading(false)
+            window.location.reload();
+
           })
           .catch(err => {
             window.alert('Unable to update', err)
@@ -128,10 +158,12 @@ const [completeProfileClicked, setcompleteProfileClicked] = useState(false)
           .then(res => {
             window.alert('Your profile has been Updated');
             setprofileUpdateIsLoading(false)
+            setcompleteProfileClicked(false)
           })
           .catch(err => {
             window.alert('Coudnot update your profile', err);
             setprofileUpdateIsLoading(false)
+            setcompleteProfileClicked(false)
           })
         } else {
           window.alert('No changes detected')
@@ -156,7 +188,7 @@ const [completeProfileClicked, setcompleteProfileClicked] = useState(false)
           {username()}
           </div>
           <div className='editButtonContainer'>
-          <img onClick={() => onEditNameClick()} src='https://www.iconsdb.com/icons/preview/white/edit-xxl.png' alt="Edit Name" />
+          <img onClick={() => onEditNameClick()} src={editIcon} alt="Edit Name" />
           </div>
           <div>
           <p id="phoneNumber">{user.number}</p>
@@ -224,14 +256,21 @@ const [completeProfileClicked, setcompleteProfileClicked] = useState(false)
           </div>
         </div>
         }
-        <img className='logOutIcon' onClick={() => logout()} src='https://www.iconsdb.com/icons/preview/white/logout-xxl.png' alt="Logout" />
+        <img className='logOutIcon' onClick={() => logout()} src={logoutIcon} alt="Logout" />
       </div>
       <WhiteLink onClick={() => onCompleteProfileClicked(true)}>
         <b>{updateORview()}</b> Your Profile
       </WhiteLink>
-      <WhiteLink>
-        <b>Go to</b> Quiz
-      </WhiteLink>
+      <div onClick={props.onClick} className='linkContainer'>
+      <div
+        className="linkContain wahniColor"
+      >
+          <Link to='/Quiz' className='flexContainFull linkToQuiz link wahniColor'>
+          <p style={{ paddingLeft: "25px"}}>
+          <b>Go to</b> Quiz</p>
+        </Link>
+      </div>
+      </div>
     </div>
   );
 }

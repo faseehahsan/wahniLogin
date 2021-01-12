@@ -20,89 +20,6 @@ function RankingScreen() {
 
   // on useEffect fetch user scores from the backEnd
 
-  const rankings = [
-    {
-      userid: "11111",
-      username: "AAAAA",
-      scores: [
-        {
-          submittedAt: 1,
-          score: "5",
-          percentageIncrease: "25",
-        },
-        {
-          submittedAt: 2,
-          score: "10",
-          percentageIncrease: "50",
-        },
-      ],
-    },
-    {
-      userid: "22222",
-      username: "BBBBB",
-      scores: [
-        {
-          submittedAt: 1,
-          score: "45",
-          percentageIncrease: "56",
-        },
-        {
-          submittedAt: 2,
-          score: "5",
-          percentageIncrease: "45",
-        },
-      ],
-    },
-    {
-      userid: "33333",
-      username: "CCCCC",
-      scores: [
-        {
-          submittedAt: 1,
-          score: "23",
-          percentageIncrease: "45",
-        },
-        {
-          submittedAt: 2,
-          score: "56",
-          percentageIncrease: "13",
-        },
-      ],
-    },
-    {
-      userid: "44444",
-      username: "DDDDD",
-      scores: [
-        {
-          submittedAt: 1,
-          score: "55",
-          percentageIncrease: "12",
-        },
-        {
-          submittedAt: 2,
-          score: "8",
-          percentageIncrease: "16",
-        },
-      ],
-    },
-    {
-      userid: "55555",
-      username: "EEEEE",
-      scores: [
-        {
-          submittedAt: 1,
-          score: "63",
-          percentageIncrease: "32",
-        },
-        {
-          submittedAt: 2,
-          score: "80",
-          percentageIncrease: "60",
-        },
-      ],
-    },
-  ];
-
   //all these contribute to UI for the animation effect
   //START
   const [mostAttemptsClicked, setmostAttemptsClicked] = useState(false);
@@ -155,9 +72,17 @@ function RankingScreen() {
           docData.forEach((doc) => {
             list.push({ ...doc.data(), id: doc.id });
           });
-          console.log(list);
+          // console.log(list);
           setTopScoresLoading(false);
-          setTopScores1(list)
+          if (list.length === 5) {
+            setTopScores1(list)
+          } else if(list.length < 5) {
+            const remainingFields = 5 - list.length;
+            for (let i = 0; i < remainingFields; i++) {
+              list.push('nil')
+            }
+            setTopScores1(list)
+          }
         },
         (err) => {
           window.alert("Unable to get rankings", err);
@@ -183,9 +108,17 @@ function RankingScreen() {
           docData.forEach((doc) => {
             list.push({ ...doc.data(), id: doc.id });
           });
-          console.log(list);
+          // console.log(list);
           setMostAttemptsLoading(false);
-          setMostAttempts1(list)
+          if (list.length === 5) {
+            setMostAttempts1(list)
+          } else if(list.length < 5) {
+            const remainingFields = 5 - list.length;
+            for (let i = 0; i < remainingFields; i++) {
+              list.push('nil')
+            }
+            setMostAttempts1(list)
+          }
         },
         (err) => {
           window.alert("Unable to get rankings", err);
@@ -210,9 +143,17 @@ function RankingScreen() {
           docData.forEach((doc) => {
             list.push({ ...doc.data(), id: doc.id });
           });
-          console.log(list);
+          // console.log(list);
           setHighestPercentageLoading(false);
-          setHighestPercentage1(list)
+          if (list.length === 5) {
+            setHighestPercentage1(list)
+          } else if(list.length < 5) {
+            const remainingFields = 5 - list.length;
+            for (let i = 0; i < remainingFields; i++) {
+              list.push('nil')
+            }
+            setHighestPercentage1(list)
+          }
         },
         (err) => {
           window.alert("Unable to get rankings", err);
@@ -264,12 +205,21 @@ function RankingScreen() {
             :
             <div className={rankTable1}>
             {topScores1.map((data, index) => {
-                return (
-                  <div className="singleRankRow">
-                    <div className="nameText rankTextStyle">{data.username}</div>
-                    <div className="scoreText rankTextStyle">{data.score}</div>
-                  </div>
-                );
+                if (data !== 'nil') {
+                  return (
+                    <div className="singleRankRow">
+                      <div className="nameText rankTextStyle">{data.username}</div>
+                      <div className="scoreText rankTextStyle">{data.score}</div>
+                    </div>
+                  );
+                } else {
+                  return (
+                    <div className="singleRankRow">
+                      <div className="nameText rankTextStyle">No Entry Yet</div>
+                      <div className="scoreText rankTextStyle">-</div>
+                    </div>
+                  )
+                }
               })}    
             </div>
             }
@@ -294,12 +244,21 @@ function RankingScreen() {
 
             <div className={rankTable2}>
             {mostAttempts1.map((data, index) => {
-                return (
-                  <div className="singleRankRow">
-                    <div className="nameText rankTextStyle">{data.username}</div>
-                    <div className="scoreText rankTextStyle">{data.attempt}</div>
-                  </div>
-                );
+                if (data !== 'nil') {
+                  return (
+                    <div className="singleRankRow">
+                      <div className="nameText rankTextStyle">{data.username}</div>
+                      <div className="scoreText rankTextStyle">{data.attempt}</div>
+                    </div>
+                  );
+                } else {
+                  return (
+                    <div className="singleRankRow">
+                      <div className="nameText rankTextStyle">No Entry Yet</div>
+                      <div className="scoreText rankTextStyle">-</div>
+                    </div>
+                  )
+                }
               })}    
             </div>
         }
@@ -325,12 +284,21 @@ function RankingScreen() {
 
             <div className={rankTable3}>
             {highestPercentage1.map((data, index) => {
-                return (
-                  <div className="singleRankRow">
-                    <div className="nameText rankTextStyle">{data.username}</div>
-                    <div className="scoreText rankTextStyle">{data.perecentageIncrease}</div>
-                  </div>
-                );
+                if (data !== 'nil') {
+                  return (
+                    <div className="singleRankRow">
+                      <div className="nameText rankTextStyle">{data.username}</div>
+                      <div className="scoreText rankTextStyle">{data.perecentageIncrease}</div>
+                    </div>
+                  );
+                } else {
+                  return (
+                    <div className="singleRankRow">
+                      <div className="nameText rankTextStyle">No Entry Yet</div>
+                      <div className="scoreText rankTextStyle">-</div>
+                    </div>
+                  )
+                }
               })}    
             </div>
         }

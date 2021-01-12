@@ -56,7 +56,6 @@ export function UserContextProvider(props) {
               setuserScoresLoading(false);
             },
             (err) => {
-              console.log("user last score unable to fetch", err);
               userScoresLoading(false);
             }
           );
@@ -71,7 +70,6 @@ export function UserContextProvider(props) {
               setuserDetailsLoading(false);
             },
             (err) => {
-              console.log("Unable to fetch user Details", err);
               setuserDetailsLoading(false);
             }
           );

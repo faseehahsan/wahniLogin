@@ -30,8 +30,20 @@ function QuestionCard(props) {
   const [isLoading, setIsLoading] = useState(false);
   // check if second firebase opretion is loading
   const [isLoading1, setIsLoading1] = useState(false);
+
   // calculate score 
   const [score, setScore] = useState(0)
+
+  useEffect(() => {
+    if(timeOver) {
+      if(!quizOver) {
+        getCorrectAnswers()
+      }
+    } else {
+      console.log('not over')
+    }
+    
+  }, [duration])
 
   useEffect(() => {
     var timesRun = 0;
@@ -48,9 +60,15 @@ function QuestionCard(props) {
     }, 1000);
 
     setTimeout(() => {
-      setTimeOver(true);
+      // set a loaading here
+      setTimeOver(true)
       setDuration("TIME OUT");
-
+      if(selectedAnswers[9] === 1) {
+        console.log('timeout')
+      } else {
+        console.log('quiz aint over')
+      }
+      
     }, 30000);
 
     return () => clearInterval(interval);
@@ -60,17 +78,17 @@ function QuestionCard(props) {
   
 
   // set an array of correct answers
-  const [correctAnswer, setCorrectAnswer] = useState([0,0,0,0,0]);
+  const [correctAnswer, setCorrectAnswer] = useState([0,0,0,0,0,0,0,0,0,0]);
 
   // set an array of answers that are selected
-  const [selectedAnswers, setSelectedAnswers] = useState([]);
+  const [selectedAnswers, setSelectedAnswers] = useState([1,1,1,1,1,1,1,1,1,1]);
 
   function answerClickHandler(answer, indexure) {
     // set selectedAnswers arrays each time an answer is selected
     const newArray = [...selectedAnswers];
     newArray[indexure] = answer;
     setSelectedAnswers(newArray);
-
+    console.log(newArray)
     // navigate to next Question
     let nextQuestion = currentQuestion + 1;
     if (nextQuestion < questions.length) {
@@ -84,10 +102,10 @@ function QuestionCard(props) {
   }
 
   async function getCorrectAnswers() {
-    
+    const listTemp = []
+
     //loop over questions and get the answers
-    await questions.forEach((q,i) => {
-      
+    await questions.map((q,i) => {
 
       firebase
       .firestore()
@@ -96,10 +114,19 @@ function QuestionCard(props) {
       .then(docSnap => {
         const answersingle = docSnap.data().answer;
         // set correct answers array
-        setCorrectAnswer(prevCorrectAnswer => [...prevCorrectAnswer.slice(0,i), answersingle, ...prevCorrectAnswer.slice(i+1,3)]);
+        // setCorrectAnswer(prevCorrectAnswer => [...prevCorrectAnswer.slice(0,i), answersingle, ...prevCorrectAnswer.slice(i+1,3)]);
+        listTemp[i]=answersingle;
         // if everything is over set quiz over to true
+        
         if(i === questions.length-1) {
           setIsLoading(false)
+          // if(timeOver) {
+          //   // set the timeover loader false
+          // }
+          setCorrectAnswer(listTemp)
+          console.log(listTemp)
+          console.log(selectedAnswers)
+
         }
       })
       .catch(err => {
@@ -111,9 +138,11 @@ function QuestionCard(props) {
   }
 
   function onClickToSeeScore() {
+
     let arrayTest = []
     for (let i = 0; i < questions.length; i++) {
       if(selectedAnswers[i] === correctAnswer[i]) {
+        console.log('coret')
         setScore(prevScore => prevScore + 1)
         arrayTest.push('correct')
       }
@@ -166,7 +195,7 @@ function QuestionCard(props) {
         })
         .then(res => {
           setIsLoading1(false)
-          console.log('high score updated')
+          // console.log('high score updated')
         })
         .catch(err => {
           window.alert('unable to update your profile:', err)
@@ -212,7 +241,7 @@ function QuestionCard(props) {
       .set(userDetails2add)
       .then(res => {
         setIsLoading1(false)
-        console.log('new user details ADDED')
+        // console.log('new user details ADDED')
       })
       .catch(err => {
         window.alert('Unable to update your Profile :', err)
@@ -229,12 +258,12 @@ function QuestionCard(props) {
       .add(newScoreObject)
       .then(res => {
         
-        console.log('added to rankings')
+        // console.log('added to rankings')
 
         setIsLoading(false)
       })
       .catch(err => {
-        console.log('error')
+        // console.log('error')
 
         window.alert('Error updating the rankings')
         setIsLoading(false)
@@ -268,17 +297,22 @@ function QuestionCard(props) {
     return (
       <div className="flexContainFull flexCenter fontMontserrat">
         
-        <div className="timeOutContainer">
-          <p style={{ fontSize: "24px", fontWeight: "bold" }}>TIMEOUT</p>
-          <div
-            className="buttonOne wahniColor retryButton"
-            onClick={() =>
-              onClickToSeeScore()
-            }
-          >
-            Click to see Score
+        {
+          isLoading ? 
+          <Loader width='50px' borderWidth='6px' />
+          :
+          <div className="timeOutContainer">
+            <p style={{ fontSize: "24px", fontWeight: "bold" }}>TIMEOUT</p>
+            <div
+              className="buttonOne wahniColor retryButton"
+              onClick={() =>
+                onClickToSeeScore()
+              }
+            >
+              Click to see Score
+            </div>
           </div>
-        </div>
+        }
       </div>
     );
   }
@@ -341,7 +375,7 @@ function QuestionCard(props) {
           </div>
 
           <div className="answer-section wahniColor">
-            {questions[currentQuestion].options.map((option) => (
+            {questions[currentQuestion].options.map((option, answerIndex) => (
               <div
                 className="buttonOne"
                 id="answerButton"
@@ -352,7 +386,7 @@ function QuestionCard(props) {
                   );
                 }}
               >
-                {option}
+                {answerIndex+1}. {option}
               </div>
             ))}
           </div>

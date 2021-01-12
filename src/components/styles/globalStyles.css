@@ -43,7 +43,7 @@
   }
 
 .buttonOne {
-    height: 45px;
+    min-height: 45px;
     font-size: 16px;
     letter-spacing: 0.06em;
     display: flex;
