@@ -7,6 +7,10 @@
     background-color: #5ca54b;
 }
 
+.navContainer img {
+    margin-left: 15px;
+}
+
 .navLinks{
     display: flex;
     justify-content: center;
@@ -31,4 +35,26 @@
 .navLinks:hover {
     background-color: #225218;
     color: white;
+}
+
+.energyQuizLink {
+    text-decoration: none;
+    color: white;
+    font-size: 22px;
+    padding-right: 10px;
+}
+
+.goToProfileLink {
+    background-color: white;
+    text-decoration: none;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    /* border-width: 2px; */
+    margin-right: 10px;
+    color: black;
 }

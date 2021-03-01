@@ -24,8 +24,23 @@ function Home() {
   // useHistory hook to redirect to '/Quiz' on login if registration is complete
   const history = useHistory();
 
-  function getRandomNumber(min, max) {
-    return Math.ceil(Math.random() * (max - min) + min);
+  function generateRandoms(min, max, numOfRandoms, unique){
+    /*min is the smallest possible generated number*/
+    /*max is the largest possible generated number*/
+    /*numOfRandoms is the number of random numbers to generate*/
+    /*unique is a boolean specifying whether the generated random numbers need to be unique*/
+      var getRandom = function(x, y){
+        return Math.floor(Math.random() * (x - y + 1) + y);
+      }
+      var randoms = [];
+      while(randoms.length<numOfRandoms){
+        var random = getRandom(min, max);
+        if(randoms.indexOf(random)==-1||!unique){
+          randoms.push(random);
+        }
+      }
+      return randoms;
+      // console.log(randoms)
   }
 
   async function getQuestionsFromFirestore() {
@@ -43,18 +58,19 @@ function Home() {
         });
         // 
         const randomNumber = uniqueRandom(1, list1.length - 1);
-        const randomQuestionNumberArray = [
-          randomNumber(),
-          randomNumber(),
-          randomNumber(),
-          randomNumber(),
-          randomNumber(),
-          randomNumber(),
-          randomNumber(),
-          randomNumber(),
-          randomNumber(),
-          randomNumber(),
-        ];
+        // const randomQuestionNumberArray = [
+        //   randomNumber(),
+        //   randomNumber(),
+        //   randomNumber(),
+        //   randomNumber(),
+        //   randomNumber(),
+        //   randomNumber(),
+        //   randomNumber(),
+        //   randomNumber(),
+        //   randomNumber(),
+        //   randomNumber(),
+        // ];
+        const randomQuestionNumberArray = generateRandoms(0,list1.length,10,true);
         const randomQuestionsArray = [];
 
         if (list1.length >= 10) {

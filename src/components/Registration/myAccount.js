@@ -35,6 +35,8 @@ function Login() {
   const [inputNumber, setInputNumber] = useState("");
   const [otpInput, setOtpInput] = useState('')
   const [verificationId1, setVerificationId1] = useState('');
+  // show itp has been sent warning
+  const [otpHasBeenSent, setotpHasBeenSent] = useState(false)
   // useHistory hook to redirect to '/Quiz' on login if registration is complete
   const history = useHistory();
 
@@ -81,7 +83,8 @@ function Login() {
         // step4
         setVerificationId1(confirmationResult.verificationId)
         // console.log('verificationId set')
-        alert('OTP has been sent to your number')
+        // alert('OTP has been sent to your number')
+        setotpHasBeenSent(true)
       })
       .catch(function (error) {
         // Error; SMS not sent
@@ -238,6 +241,12 @@ function Login() {
 
           </div>
           <div className='flexCenter' id="recaptcha-container"></div>
+          {
+            otpHasBeenSent ? 
+            <p className='otpHasBeenSent'>OTP has been sent to your number</p>
+            :
+            null
+          }
 
   
             

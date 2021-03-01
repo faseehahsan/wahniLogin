@@ -54,6 +54,14 @@ function Home() {
             <p style={{ paddingLeft: "25px", fontWeight: "bold" }}>Leader</p>
             <p>board</p>
           </Link>
+
+          <Link
+            className="singleLinkContainer link link2 wahniColor"
+            to="/"
+          >
+            <p style={{ paddingLeft: "25px", fontWeight: "bold" }}>Go to</p>
+            <p style={{paddingLeft: '4px'}}>profile</p>
+          </Link>
         </div>
       </div>
     </div>

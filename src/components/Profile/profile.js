@@ -176,12 +176,38 @@ const [completeProfileClicked, setcompleteProfileClicked] = useState(false)
   //check if user object has a name
   //if NO name, complete registration form is shown else Profile is shown
 
+  function generateRandoms(min, max, numOfRandoms, unique){
+    /*min is the smallest possible generated number*/
+    /*max is the largest possible generated number*/
+    /*numOfRandoms is the number of random numbers to generate*/
+    /*unique is a boolean specifying whether the generated random numbers need to be unique*/
+      var getRandom = function(x, y){
+        return Math.floor(Math.random() * (x - y + 1) + y);
+      }
+      var randoms = [];
+      while(randoms.length<numOfRandoms){
+        var random = getRandom(min, max);
+        if(randoms.indexOf(random)==-1||!unique){
+          randoms.push(random);
+        }
+      }
+      // return randoms;
+      console.log(randoms)
+  }
+
   return (
     <div className="body fontMontserrat">
       <div className="cardOne wahniBgColor flexCenter" id="profileHeight">
         {
           completeProfileClicked ? 
-          null
+          <div className="profileBoxes profileBoxForUpdate">
+          <div>
+          {username()}
+          </div>
+          <div className='editButtonContainer'>
+          <img onClick={() => onEditNameClick()} src={editIcon} alt="Edit Name" />
+          </div>
+        </div>
           :
           <div className="profileBoxes profileBox1">
           <div>
@@ -224,12 +250,12 @@ const [completeProfileClicked, setcompleteProfileClicked] = useState(false)
             required={true}
           />
         </div>
-        <div onClick={() => updateProfile()} className='updateProfileButton wahniColor'>
+        <div className='updateProfileButton wahniColor'>
         {
           profileUpdateIsLoading ? 
           <Loader borderWidth='3px' width='10px'/>
           :
-          <p><b>Update</b> Profile</p>
+          <p onClick={() => updateProfile()}><b>Update</b> Profile</p>
         }
         {/* <img onClick={() => onEditNameClick()} src='https://www.iconsdb.com/icons/preview/white/save-as-xxl.png' alt="" /> */}
         </div>
@@ -256,7 +282,15 @@ const [completeProfileClicked, setcompleteProfileClicked] = useState(false)
           </div>
         </div>
         }
-        <img className='logOutIcon' onClick={() => logout()} src={logoutIcon} alt="Logout" />
+        
+        {
+          completeProfileClicked ?
+          null :
+          <div onClick={() => logout()} className='logOutIcon'>
+            <p>Logout</p>
+            <img src={logoutIcon} alt="Logout" />
+          </div>
+        }
       </div>
       <WhiteLink onClick={() => onCompleteProfileClicked(true)}>
         <b>{updateORview()}</b> Your Profile

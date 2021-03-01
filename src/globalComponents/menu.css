@@ -1,0 +1,25 @@
+.menuContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: absolute;
+    width: 110px;
+    margin-top: 180px;
+    /* height: 60px; */
+    z-index: 100;
+    background-color: blanchedalmond;
+}
+
+.menuLink {
+    flex: 1;
+    /* height: 20px; */
+    text-decoration: none;
+    color: black;
+    background-color: blueviolet;
+    padding: 0 5px 0 5px;
+    border-bottom: 2px solid black;
+}
+
+.hideMenuContainer {
+    display: none;
+}
